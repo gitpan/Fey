@@ -1,11 +1,13 @@
 package Fey::SQL::Delete;
+BEGIN {
+  $Fey::SQL::Delete::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
-our $VERSION = '0.34';
-
-use Fey::Types;
+use Fey::Types qw( ArrayRef CanQuote Table );
 use Scalar::Util qw( blessed );
 
 use Moose;
@@ -14,74 +16,78 @@ use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
 with 'Fey::Role::SQL::HasWhereClause',
-     'Fey::Role::SQL::HasOrderByClause',
-     'Fey::Role::SQL::HasLimitClause';
+    'Fey::Role::SQL::HasOrderByClause',
+    'Fey::Role::SQL::HasLimitClause';
 
 with 'Fey::Role::SQL::HasBindParams' => { excludes => 'bind_params' };
 
-has '_from' =>
-    ( is       => 'rw',
-      isa      => 'ArrayRef',
-      default  => sub { [] },
-      init_arg => undef,
-    );
+has '_from' => (
+    is       => 'rw',
+    isa      => ArrayRef,
+    default  => sub { [] },
+    init_arg => undef,
+);
 
 with 'Fey::Role::SQL::Cloneable';
 
 sub delete { return $_[0] }
 
-sub from
-{
-    my $self     = shift;
+sub from {
+    my $self = shift;
 
     my $count = @_ ? @_ : 1;
-    my (@tables) = pos_validated_list( \@_, 
-                                       ( ( { isa => 'Fey::Table' } ) x $count ),
-                                       MX_PARAMS_VALIDATE_NO_CACHE => 1,
-                                     );
+    my (@tables) = pos_validated_list(
+        \@_,
+        ( ( { isa => Table } ) x $count ),
+        MX_PARAMS_VALIDATE_NO_CACHE => 1,
+    );
 
-    $self->_set_from(\@tables);
+    $self->_set_from( \@tables );
 
     return $self;
 }
 
-sub sql
-{
-    my $self  = shift;
-    my ($dbh) = pos_validated_list( \@_, { isa => 'Fey::Types::CanQuote' } );
+sub sql {
+    my $self = shift;
+    my ($dbh) = pos_validated_list( \@_, { isa => CanQuote } );
 
-    return ( join ' ',
-             $self->delete_clause($dbh),
-             $self->where_clause($dbh),
-             $self->order_by_clause($dbh),
-             $self->limit_clause($dbh),
-           );
+    return (
+        join ' ',
+        $self->delete_clause($dbh),
+        $self->where_clause($dbh),
+        $self->order_by_clause($dbh),
+        $self->limit_clause($dbh),
+    );
 }
 
-sub delete_clause
-{
+sub delete_clause {
     return 'DELETE FROM ' . $_[0]->_tables_subclause( $_[1] );
 }
 
-sub _tables_subclause
-{
-    return ( join ', ',
-             map { $_[1]->quote_identifier( $_->name() ) }
-             @{ $_[0]->_from() }
-           );
+sub _tables_subclause {
+    return (
+        join ', ',
+        map { $_[1]->quote_identifier( $_->name() ) } @{ $_[0]->_from() }
+    );
 }
-
-no Moose;
 
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Represents a DELETE query
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::SQL::Delete - Represents a DELETE query
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -178,19 +184,24 @@ Returns the C<LIMIT> clause portion of the SQL statement as a string.
 
 =back
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

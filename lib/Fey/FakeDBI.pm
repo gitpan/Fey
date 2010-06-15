@@ -1,31 +1,28 @@
 package Fey::FakeDBI;
+BEGIN {
+  $Fey::FakeDBI::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
 
 # This package allows us to use a DBI handle in id(). Even though we
 # may not be quoting properly for a given DBMS, we will still generate
 # unique ids, and that's all that matters.
 
-sub quote_identifier
-{
+sub quote_identifier {
     shift;
 
-    if ( @_ == 3 )
-    {
-        return q{"} . $_[1] . q{"} . q{.} . q{"} . $_[2] . q{"}
+    if ( @_ == 3 ) {
+        return q{"} . $_[1] . q{"} . q{.} . q{"} . $_[2] . q{"};
     }
-    else
-    {
+    else {
 
         return q{"} . $_[0] . q{"};
     }
 }
 
-sub quote
-{
+sub quote {
     my $text = $_[1];
 
     $text =~ s/"/""/g;
@@ -34,11 +31,19 @@ sub quote
 
 1;
 
-__END__
+# ABSTRACT: Just enough of the DBI API to fool Fey
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::FakeDBI - Just enough of the DBI API to fool Fey
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -57,19 +62,24 @@ C<quote()> and C<quote_identifier()> methods only.
 It exists solely to allow some internal API re-use for Fey, and you
 should never need to use it explicitly.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

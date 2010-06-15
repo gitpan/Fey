@@ -1,13 +1,17 @@
 package Fey::SQL::Update;
+BEGIN {
+  $Fey::SQL::Update::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use Fey::Exceptions qw( param_error );
 use Fey::Literal;
-use Fey::Types;
+use Fey::Types
+    qw( ArrayRef CanQuote ColumnWithTable NonNullableUpdateValue
+        NullableUpdateValue Table );
 use overload ();
 use Scalar::Util qw( blessed );
 
@@ -16,95 +20,89 @@ use MooseX::Params::Validate qw( pos_validated_list );
 use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
-with 'Fey::Role::SQL::HasOrderByClause',
-     'Fey::Role::SQL::HasLimitClause';
+with 'Fey::Role::SQL::HasOrderByClause', 'Fey::Role::SQL::HasLimitClause';
 
-with 'Fey::Role::SQL::HasWhereClause'
-          => { excludes => 'bind_params',
-               alias    => { bind_params => '_where_clause_bind_params' },
-             };
+with 'Fey::Role::SQL::HasWhereClause' => {
+    excludes => 'bind_params',
+    alias    => { bind_params => '_where_clause_bind_params' },
+};
 
-with 'Fey::Role::SQL::HasBindParams'
-          => { excludes => 'bind_params',
-               alias    => { bind_params => '_update_bind_params' },
-             };
+with 'Fey::Role::SQL::HasBindParams' => {
+    excludes => 'bind_params',
+    alias    => { bind_params => '_update_bind_params' },
+};
 
-has '_update' =>
-    ( is       => 'rw',
-      isa      => 'ArrayRef',
-      default  => sub { [] },
-      init_arg => undef,
-    );
+has '_update' => (
+    is       => 'rw',
+    isa      => ArrayRef,
+    default  => sub { [] },
+    init_arg => undef,
+);
 
-has '_set_pairs' =>
-    ( traits   => [ 'Array' ],
-      is       => 'bare',
-      isa      => 'ArrayRef[ArrayRef]',
-      default  => sub { [] },
-      handles  => { _add_set_pair => 'push',
-                    _set_pairs    => 'elements',
-                  },
-      init_arg => undef,
-    );
+has '_set_pairs' => (
+    traits  => ['Array'],
+    is      => 'bare',
+    isa     => ArrayRef[ArrayRef],
+    default => sub { [] },
+    handles => {
+        _add_set_pair => 'push',
+        _set_pairs    => 'elements',
+    },
+    init_arg => undef,
+);
 
 with 'Fey::Role::SQL::Cloneable';
 
-sub update
-{
+sub update {
     my $self = shift;
 
     my $count = @_ ? @_ : 1;
-    my (@tables) = pos_validated_list( \@_,
-                                       ( ( { isa => 'Fey::Table' } ) x $count ),
-                                       MX_PARAMS_VALIDATE_NO_CACHE => 1,
-                                     );
+    my (@tables) = pos_validated_list(
+        \@_,
+        ( ( { isa => Table } ) x $count ),
+        MX_PARAMS_VALIDATE_NO_CACHE => 1,
+    );
 
-    $self->_set_update(\@tables);
+    $self->_set_update( \@tables );
 
     return $self;
 }
 
-sub set
-{
+sub set {
     my $self = shift;
 
-    if ( ! @_ || @_ % 2 )
-    {
+    if ( !@_ || @_ % 2 ) {
         my $count = @_;
         param_error
             "The set method expects a list of paired column objects and values but you passed $count parameters";
     }
 
     my @spec;
-    for ( my $x = 0; $x < @_; $x += 2 )
-    {
-        push @spec, { isa => 'Fey::Types::ColumnWithTable' };
+    for ( my $x = 0; $x < @_; $x += 2 ) {
+        push @spec, { isa => ColumnWithTable };
         push @spec,
-                blessed $_[$x] && $_[$x]->is_nullable()
-                ? { isa => 'Fey::Types::NullableUpdateValue' }
-                : { isa => 'Fey::Types::NonNullableUpdateValue' };
+            blessed $_[$x] && $_[$x]->is_nullable()
+            ? { isa => NullableUpdateValue }
+            : { isa => NonNullableUpdateValue };
     }
 
-    my @set = pos_validated_list( \@_, @spec, MX_PARAMS_VALIDATE_NO_CACHE => 1 );
+    my @set
+        = pos_validated_list( \@_, @spec, MX_PARAMS_VALIDATE_NO_CACHE => 1 );
 
-    for ( my $x = 0; $x < @_; $x += 2 )
-    {
+    for ( my $x = 0; $x < @_; $x += 2 ) {
         my $val = $_[ $x + 1 ];
 
         $val .= ''
             if blessed $val && overload::Overloaded($val);
 
-        if ( ! blessed $val )
-        {
-            if ( defined $val && $self->auto_placeholders() )
-            {
+        if ( !blessed $val ) {
+            if ( defined $val && $self->auto_placeholders() ) {
                 $self->_add_bind_param($val);
 
                 $val = Fey::Placeholder->new();
             }
-            else
-            {
-                $val = Fey::Literal->new_from_scalar($val );
+            else {
+                $val = Fey::Literal->new_from_scalar($val);
             }
         }
 
@@ -114,35 +112,32 @@ sub set
     return $self;
 }
 
-sub sql
-{
-    my $self  = shift;
-    my ($dbh) = pos_validated_list( \@_, { isa => 'Fey::Types::CanQuote' } );
+sub sql {
+    my $self = shift;
+    my ($dbh) = pos_validated_list( \@_, { isa => CanQuote } );
 
-    return ( join ' ',
-             $self->update_clause($dbh),
-             $self->set_clause($dbh),
-             $self->where_clause($dbh),
-             $self->order_by_clause($dbh),
-             $self->limit_clause($dbh),
-           );
+    return (
+        join ' ',
+        $self->update_clause($dbh),
+        $self->set_clause($dbh),
+        $self->where_clause($dbh),
+        $self->order_by_clause($dbh),
+        $self->limit_clause($dbh),
+    );
 }
 
-sub update_clause
-{
+sub update_clause {
     return 'UPDATE ' . $_[0]->_tables_subclause( $_[1] );
 }
 
-sub _tables_subclause
-{
-    return ( join ', ',
-             map { $_[1]->quote_identifier( $_->name() ) }
-             @{ $_[0]->_update() }
-           );
+sub _tables_subclause {
+    return (
+        join ', ',
+        map { $_[1]->quote_identifier( $_->name() ) } @{ $_[0]->_update() }
+    );
 }
 
-sub set_clause
-{
+sub set_clause {
     my $self = shift;
     my $dbh  = shift;
 
@@ -151,46 +146,51 @@ sub set_clause
     # multi-table update also allows the table name in the LHS.
     my $col_quote = @{ $self->_update() } > 1 ? '_name_and_table' : '_name';
 
-    return ( 'SET '
-             . ( join ', ',
-                 map {   $self->$col_quote( $_->[0], $dbh )
-                       . ' = '
-                       . $_->[1]->sql( $dbh ) }
-                 $self->_set_pairs()
-               )
-           );
+    return (
+        'SET ' . (
+            join ', ',
+            map {
+                      $self->$col_quote( $_->[0], $dbh ) . ' = '
+                    . $_->[1]->sql($dbh)
+                } $self->_set_pairs()
+        )
+    );
 }
 
-sub _name_and_table
-{
+sub _name_and_table {
     return $_[1]->sql( $_[2] );
 }
 
-sub _name
-{
+sub _name {
     return $_[2]->quote_identifier( $_[1]->name() );
 }
 
-sub bind_params
-{
+sub bind_params {
     my $self = shift;
 
-    return ( $self->_update_bind_params(),
-             $self->_where_clause_bind_params(),
-           );
+    return (
+        $self->_update_bind_params(),
+        $self->_where_clause_bind_params(),
+    );
 }
-
-no Moose;
 
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Represents a UPDATE query
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::SQL::Update - Represents a UPDATE query
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -308,19 +308,24 @@ Returns the C<LIMIT> clause portion of the SQL statement as a string.
 
 =back
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

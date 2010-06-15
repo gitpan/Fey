@@ -1,9 +1,10 @@
 package Fey::SQL;
+BEGIN {
+  $Fey::SQL::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
 
 use Fey::SQL::Delete;
 use Fey::SQL::Insert;
@@ -15,62 +16,61 @@ use Fey::SQL::Intersect;
 use Fey::SQL::Except;
 use Fey::Types;
 
-
-sub new_delete
-{
+sub new_delete {
     shift;
     return Fey::SQL::Delete->new(@_);
 }
 
-sub new_insert
-{
+sub new_insert {
     shift;
     return Fey::SQL::Insert->new(@_);
 }
 
-sub new_select
-{
+sub new_select {
     shift;
     return Fey::SQL::Select->new(@_);
 }
 
-sub new_update
-{
+sub new_update {
     shift;
     return Fey::SQL::Update->new(@_);
 }
 
-sub new_where
-{
+sub new_where {
     shift;
     return Fey::SQL::Where->new(@_);
 }
 
-sub new_union
-{
+sub new_union {
     shift;
     return Fey::SQL::Union->new(@_);
 }
 
-sub new_intersect
-{
+sub new_intersect {
     shift;
     return Fey::SQL::Intersect->new(@_);
 }
 
-sub new_except
-{
+sub new_except {
     shift;
     return Fey::SQL::Except->new(@_);
 }
 
 1;
 
-__END__
+# ABSTRACT: Documentation on SQL generation with Fey and SQL object factory
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::SQL - Documentation on SQL generation with Fey and SQL object factory
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -392,19 +392,24 @@ object that overloads stringification or numification. This includes
 C<WHERE> clause comparisons, C<VALUES> in an C<INSERT>, and C<SET>
 clauses in an C<UPDATE>.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

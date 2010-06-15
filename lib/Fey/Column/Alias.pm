@@ -1,15 +1,17 @@
 package Fey::Column::Alias;
+BEGIN {
+  $Fey::Column::Alias::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use Fey::Column;
 use Fey::Exceptions qw( object_state_error );
 use Fey::Table;
 use Fey::Table::Alias;
-use Fey::Types;
+use Fey::Types qw( Column Str );
 
 use Moose;
 use MooseX::SemiAffordanceAccessor;
@@ -17,33 +19,34 @@ use MooseX::StrictConstructor;
 
 with 'Fey::Role::ColumnLike';
 
-has 'id' =>
-    ( is         => 'ro',
-      lazy_build => 1,
-      init_arg   => undef,
-      clearer    => '_clear_id',
-    );
+has 'id' => (
+    is         => 'ro',
+    lazy_build => 1,
+    init_arg   => undef,
+    clearer    => '_clear_id',
+);
 
-has 'column' =>
-    ( is      => 'ro',
-      isa     => 'Fey::Column',
-      handles => [ qw( name type generic_type length precision
-                       is_auto_increment is_nullable table ) ],
-    );
+has 'column' => (
+    is      => 'ro',
+    isa     => Column,
+    handles => [
+        qw( name type generic_type length precision
+            is_auto_increment is_nullable table )
+    ],
+);
 
-has 'alias_name' =>
-    ( is         => 'ro',
-      isa        => 'Str',
-      lazy_build => 1,
-    );
+has 'alias_name' => (
+    is         => 'ro',
+    isa        => Str,
+    lazy_build => 1,
+);
 
 with 'Fey::Role::Named';
 
-
 {
     my %Numbers;
-    sub _build_alias_name
-    {
+
+    sub _build_alias_name {
         my $self = shift;
 
         my $name = $self->name();
@@ -53,17 +56,16 @@ with 'Fey::Role::Named';
     }
 }
 
-sub is_alias { 1 }
+sub is_alias {1}
 
 sub sql { $_[1]->quote_identifier( $_[0]->alias_name() ) }
 
-sub sql_with_alias
-{
-    my $sql =
-        $_[1]->quote_identifier( undef,
-                                 $_[0]->_containing_table_name_or_alias(),
-                                 $_[0]->name(),
-                               );
+sub sql_with_alias {
+    my $sql = $_[1]->quote_identifier(
+        undef,
+        $_[0]->_containing_table_name_or_alias(),
+        $_[0]->name(),
+    );
 
     $sql .= ' AS ';
     $sql .= $_[1]->quote_identifier( $_[0]->alias_name() );
@@ -73,29 +75,35 @@ sub sql_with_alias
 
 sub sql_or_alias { goto &sql }
 
-sub _build_id
-{
+sub _build_id {
     my $self = shift;
 
     my $table = $self->table();
 
     object_state_error
         'The id attribute cannot be determined for a column object which has no table.'
-            unless $table;
+        unless $table;
 
     return $table->id() . '.' . $self->alias_name();
 }
 
-no Moose;
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Represents an alias for a column
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Column::Alias - Represents an alias for a column
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -179,19 +187,24 @@ exception if the alias does not belong to a table.
 This class does the L<Fey::Role::ColumnLike> and L<Fey::Role::Named>
 roles.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

@@ -1,3 +1,27 @@
+0.35    2010-06-15
+
+- You can now include a WHERE clause as part of an inner join, like 
+
+  FROM Part
+       JOIN MachinePart
+       ON Part.part_id = MachinePart.part_id
+       AND MachinePart.machine_id = ?
+
+  Implemented by Dieter Pearcey.
+
+- Aliasable objects now have an alias method which sets the alias and returns
+  the object itself, for chaining:
+
+  my $function = Fey::Literal::Function->new( ... )->alias('bar');
+
+  Note that this may be deprecated in a future release where we start allowing
+  aliases to be set in the constructor.
+
+  Implemented by Dieter Pearcey.
+
+- We now use MooseX::Types internally. Patch by Oliver Charles.
+
+
 0.34    2009-10-25
 
 - Add a can_have_alias() attribute to Fey::Term::Literal. Sometimes you want

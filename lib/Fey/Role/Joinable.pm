@@ -1,24 +1,31 @@
 package Fey::Role::Joinable;
+BEGIN {
+  $Fey::Role::Joinable::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use Moose::Role;
 
-
 sub is_joinable { $_[0]->schema() ? 1 : 0 }
-
-no Moose::Role;
 
 1;
 
-__END__
+# ABSTRACT: A role for things that can be part of a JOIN BY clause
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Role::Joinable - A role for things that can be part of a JOIN BY clause
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -39,19 +46,24 @@ This role provides the following methods:
 
 Returns true.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

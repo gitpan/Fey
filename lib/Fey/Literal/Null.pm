@@ -1,9 +1,11 @@
 package Fey::Literal::Null;
+BEGIN {
+  $Fey::Literal::Null::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use Fey::Types;
 
@@ -11,28 +13,31 @@ use Moose;
 use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
-with 'Fey::Role::Comparable',
-     'Fey::Role::Selectable',
-     'Fey::Role::IsLiteral';
+with 'Fey::Role::Comparable', 'Fey::Role::Selectable', 'Fey::Role::IsLiteral';
 
-
-sub sql { 'NULL' }
+sub sql {'NULL'}
 
 sub sql_with_alias { goto &sql }
 
 sub sql_or_alias { goto &sql }
 
-no Moose;
-
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Represents a literal NULL in a SQL statement
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Literal::Null - Represents a literal NULL in a SQL statement
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -71,19 +76,24 @@ Returns the appropriate SQL snippet.
 This class does the C<Fey::Role::Selectable> and
 C<Fey::Role::Comparable> roles.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

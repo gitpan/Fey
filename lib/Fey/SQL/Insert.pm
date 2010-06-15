@@ -1,11 +1,15 @@
 package Fey::SQL::Insert;
+BEGIN {
+  $Fey::SQL::Insert::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
-our $VERSION = '0.34';
-
-use Fey::Types;
+use Fey::Types
+    qw( ArrayRef HashRef CanQuote IntoElement NonNullableInsertValue
+        NullableInsertValue );
 use overload ();
 use Scalar::Util qw( blessed );
 
@@ -16,95 +20,91 @@ use MooseX::StrictConstructor;
 
 with 'Fey::Role::SQL::HasBindParams';
 
-has '_into' =>
-    ( is        => 'rw',
-      isa       => 'ArrayRef',
-      init_arg => undef,
-    );
+has '_into' => (
+    is       => 'rw',
+    isa      => ArrayRef,
+    init_arg => undef,
+);
 
-has '_values_spec' =>
-    ( is       => 'rw',
-      isa      => 'HashRef',
-      init_arg => undef,
-    );
+has '_values_spec' => (
+    is       => 'rw',
+    isa      => HashRef,
+    init_arg => undef,
+);
 
-has '_values' =>
-    ( traits   => [ 'Array' ],
-      is       => 'bare',
-      isa      => 'ArrayRef[HashRef]',
-      default  => sub { [] },
-      handles  => { _add_values => 'push',
-                    _values     => 'elements',
-                  },
-      init_arg => undef,
-    );
+has '_values' => (
+    traits  => ['Array'],
+    is      => 'bare',
+    isa     => ArrayRef[HashRef],
+    default => sub { [] },
+    handles => {
+        _add_values => 'push',
+        _values     => 'elements',
+    },
+    init_arg => undef,
+);
 
 with 'Fey::Role::SQL::Cloneable';
 
 sub insert { return $_[0] }
 
-sub into
-{
+sub into {
     my $self = shift;
 
     my $count = @_ ? scalar @_ : 1;
-    my @into = pos_validated_list( \@_,
-                                   ( ( { isa => 'Fey::Types::IntoElement' } ) x $count ),
-                                   MX_PARAMS_VALIDATE_NO_CACHE => 1,
-                                 );
+    my @into = pos_validated_list(
+        \@_,
+        ( ( { isa => IntoElement } ) x $count ),
+        MX_PARAMS_VALIDATE_NO_CACHE => 1,
+    );
 
     my @cols;
-    for my $elt (@into)
-    {
+    for my $elt (@into) {
         push @cols, $elt->isa('Fey::Table')
             ? $elt->columns
-                : $elt;
+            : $elt;
     }
 
-    $self->_set_into(\@cols);
+    $self->_set_into( \@cols );
 
     my %spec;
-    for my $col ( @{ $self->_into() } )
-    {
-        $spec{ $col->name() } =
-            $col->is_nullable()
-            ? { isa => 'Fey::Types::NullableInsertValue' }
-            : { isa => 'Fey::Types::NonNullableInsertValue' };
+    for my $col ( @{ $self->_into() } ) {
+        $spec{ $col->name() }
+            = $col->is_nullable()
+            ? { isa => NullableInsertValue }
+            : { isa => NonNullableInsertValue };
     }
 
-    $self->_set_values_spec(\%spec);
+    $self->_set_values_spec( \%spec );
 
     return $self;
 }
 
-sub values
-{
+sub values {
     my $self = shift;
 
-    my %vals =
-        validated_hash( \@_,
-                        %{ $self->_values_spec() },
-                        MX_PARAMS_VALIDATE_NO_CACHE => 1
-                      );
+    my %vals = validated_hash(
+        \@_,
+        %{ $self->_values_spec() },
+        MX_PARAMS_VALIDATE_NO_CACHE => 1
+    );
 
-    for my $col_name ( grep { exists $vals{$_} }
-                       map { $_->name() } @{ $self->_into() } )
-    {
+    for my $col_name (
+        grep { exists $vals{$_} }
+        map  { $_->name() } @{ $self->_into() }
+        ) {
         my $val = $vals{$col_name};
 
         $val .= ''
             if blessed $val && overload::Overloaded($val);
 
-        if ( ! blessed $val )
-        {
-            if ( defined $val && $self->auto_placeholders() )
-            {
+        if ( !blessed $val ) {
+            if ( defined $val && $self->auto_placeholders() ) {
                 $self->_add_bind_param($val);
 
                 $val = Fey::Placeholder->new();
             }
-            else
-            {
+            else {
                 $val = Fey::Literal->new_from_scalar($val);
             }
         }
@@ -112,60 +112,54 @@ sub values
         $vals{$col_name} = $val;
     }
 
-    $self->_add_values(\%vals);
+    $self->_add_values( \%vals );
 
     return $self;
 }
 
-sub sql
-{
-    my $self  = shift;
-    my ($dbh) = pos_validated_list( \@_, { isa => 'Fey::Types::CanQuote' } );
+sub sql {
+    my $self = shift;
+    my ($dbh) = pos_validated_list( \@_, { isa => CanQuote } );
 
-    return ( join ' ',
-             $self->insert_clause($dbh),
-             $self->columns_clause($dbh),
-             $self->values_clause($dbh),
-           );
+    return (
+        join ' ',
+        $self->insert_clause($dbh),
+        $self->columns_clause($dbh),
+        $self->values_clause($dbh),
+    );
 }
 
-sub insert_clause
-{
-    return
-        ( 'INSERT INTO '
-          . $_[1]->quote_identifier( $_[0]->_into()->[0]->table()->name() )
-        );
+sub insert_clause {
+    return ( 'INSERT INTO '
+            . $_[1]->quote_identifier( $_[0]->_into()->[0]->table()->name() )
+    );
 }
 
-sub columns_clause
-{
-    return
-        ( '('
-          . ( join ', ',
-              map { $_[1]->quote_identifier( $_->name() ) }
-              @{ $_[0]->_into() }
+sub columns_clause {
+    return (
+        '('
+            . (
+            join ', ',
+            map { $_[1]->quote_identifier( $_->name() ) } @{ $_[0]->_into() }
             )
-          . ')'
-        );
+            . ')'
+    );
 }
 
-sub values_clause
-{
+sub values_clause {
     my $self = shift;
     my $dbh  = shift;
 
     my @cols = @{ $self->_into() };
 
     my @v;
-    for my $vals ( $self->_values() )
-    {
+    for my $vals ( $self->_values() ) {
         my $v = '(';
 
-        $v .=
-            ( join ', ',
-              map { $vals->{ $_->name() }->sql($dbh) }
-              @cols
-           );
+        $v .= (
+            join ', ',
+            map { $vals->{ $_->name() }->sql($dbh) } @cols
+        );
 
         $v .= ')';
 
@@ -175,17 +169,23 @@ sub values_clause
     return 'VALUES ' . join ',', @v;
 }
 
-no Moose;
-
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Represents a INSERT query
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::SQL::Insert - Represents a INSERT query
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -290,19 +290,24 @@ Returns the C<VALUES> clause portion of the SQL statement as a string.
 
 =back
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

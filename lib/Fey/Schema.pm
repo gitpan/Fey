@@ -1,15 +1,17 @@
 package Fey::Schema;
+BEGIN {
+  $Fey::Schema::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use Fey::Exceptions qw( param_error );
 use Fey::NamedObjectSet;
 use Fey::SQL;
 use Fey::Table;
-use Fey::Types;
+use Fey::Types qw( FK HashRef NamedObjectSet Str Table TableLikeOrName TableOrName  );
 use Scalar::Util qw( blessed );
 
 use Moose 0.90;
@@ -17,34 +19,33 @@ use MooseX::Params::Validate qw( pos_validated_list );
 use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
-has 'name' =>
-    ( is       => 'rw',
-      isa      => 'Str',
-      required => 1,
-    );
+has 'name' => (
+    is       => 'rw',
+    isa      => Str,
+    required => 1,
+);
 
-has '_tables' =>
-    ( is       => 'ro',
-      isa      => 'Fey::NamedObjectSet',
-      default  => sub { return Fey::NamedObjectSet->new() },
-      handles  => { tables => 'objects',
-                    table  => 'object',
-                  },
-      init_arg => undef,
-    );
+has '_tables' => (
+    is      => 'ro',
+    isa     => NamedObjectSet,
+    default => sub { return Fey::NamedObjectSet->new() },
+    handles => {
+        tables => 'objects',
+        table  => 'object',
+    },
+    init_arg => undef,
+);
 
-has '_fks' =>
-    ( is       => 'ro',
-      isa      => 'HashRef',
-      default  => sub { {} },
-      init_arg => undef,
-    );
+has '_fks' => (
+    is       => 'ro',
+    isa      => HashRef,
+    default  => sub { {} },
+    init_arg => undef,
+);
 
-
-sub add_table
-{
-    my $self  = shift;
-    my ($table) = pos_validated_list( \@_, { isa => 'Fey::Table' } );
+sub add_table {
+    my $self = shift;
+    my ($table) = pos_validated_list( \@_, { isa => Table } );
 
     my $name = $table->name();
     param_error "The schema already contains a table named $name."
@@ -57,16 +58,15 @@ sub add_table
     return $self;
 }
 
-sub remove_table
-{
+sub remove_table {
     my $self = shift;
-    my ($table) = pos_validated_list( \@_, { isa => 'Fey::Types::TableOrName' } );
+    my ($table)
+        = pos_validated_list( \@_, { isa => TableOrName } );
 
     $table = $self->table($table)
         unless blessed $table;
 
-    for my $fk ( $self->foreign_keys_for_table($table) )
-    {
+    for my $fk ( $self->foreign_keys_for_table($table) ) {
         $self->remove_foreign_key($fk);
     }
 
@@ -77,97 +77,86 @@ sub remove_table
     return $self;
 }
 
-sub add_foreign_key
-{
+sub add_foreign_key {
     my $self = shift;
-    my ($fk) = pos_validated_list( \@_, { isa => 'Fey::FK' } );
+    my ($fk) = pos_validated_list( \@_, { isa => FK } );
 
     my $fk_id = $fk->id();
 
     my $source_table_name = $fk->source_table()->name();
 
-    for my $col_name ( map { $_->name() } @{ $fk->source_columns() } )
-    {
+    for my $col_name ( map { $_->name() } @{ $fk->source_columns() } ) {
         $self->_fks()->{$source_table_name}{$col_name}{$fk_id} = $fk;
     }
 
     my $target_table_name = $fk->target_table()->name();
 
-    for my $col_name ( map { $_->name() } @{ $fk->target_columns() } )
-    {
+    for my $col_name ( map { $_->name() } @{ $fk->target_columns() } ) {
         $self->_fks()->{$target_table_name}{$col_name}{$fk_id} = $fk;
     }
 
     return $self;
 }
 
-sub remove_foreign_key
-{
+sub remove_foreign_key {
     my $self = shift;
-    my ($fk) = pos_validated_list( \@_, { isa => 'Fey::FK' } );
+    my ($fk) = pos_validated_list( \@_, { isa => FK } );
 
     my $fk_id = $fk->id();
 
     my $source_table_name = $fk->source_table()->name();
-    for my $col_name ( map { $_->name() } @{ $fk->source_columns() } )
-    {
+    for my $col_name ( map { $_->name() } @{ $fk->source_columns() } ) {
         delete $self->_fks()->{$source_table_name}{$col_name}{$fk_id};
     }
 
     my $target_table_name = $fk->target_table()->name();
-    for my $col_name ( map { $_->name() } @{ $fk->target_columns() } )
-    {
+    for my $col_name ( map { $_->name() } @{ $fk->target_columns() } ) {
         delete $self->_fks()->{$target_table_name}{$col_name}{$fk_id};
     }
 
     return $self;
 }
 
-sub foreign_keys_for_table
-{
-    my $self    = shift;
-    my ($table) = pos_validated_list( \@_, { isa => 'Fey::Types::TableOrName' } );
+sub foreign_keys_for_table {
+    my $self = shift;
+    my ($table)
+        = pos_validated_list( \@_, { isa => TableOrName } );
 
     my $name = blessed $table ? $table->name() : $table;
 
-    my %fks =
-        ( map { $_->id() => $_ }
-          map { values %{ $self->_fks()->{$name}{$_} } }
-          keys %{ $self->_fks()->{$name} || {} }
-        );
+    my %fks = (
+        map { $_->id() => $_ }
+            map { values %{ $self->_fks()->{$name}{$_} } }
+            keys %{ $self->_fks()->{$name} || {} }
+    );
 
     return values %fks;
 }
 
-sub foreign_keys_between_tables
-{
-    my $self    = shift;
-    my ( $table1, $table2 ) =
-        pos_validated_list( \@_,
-                            { isa => 'Fey::Types::TableLikeOrName' },
-                            { isa => 'Fey::Types::TableLikeOrName' }
-                          );
+sub foreign_keys_between_tables {
+    my $self = shift;
+    my ( $table1, $table2 ) = pos_validated_list(
+        \@_,
+        { isa => TableLikeOrName },
+        { isa => TableLikeOrName }
+    );
 
-    my $name1 =
-        ! blessed $table1
-        ? $table1
-        : $table1->isa('Fey::Table')
-        ? $table1->name()
-        : $table1->table()->name();
+    my $name1
+        = !blessed $table1           ? $table1
+        : $table1->isa('Fey::Table') ? $table1->name()
+        :                              $table1->table()->name();
 
-    my $name2 =
-        ! blessed $table2
-        ? $table2
-        : $table2->isa('Fey::Table')
-        ? $table2->name()
-        : $table2->table()->name();
+    my $name2
+        = !blessed $table2           ? $table2
+        : $table2->isa('Fey::Table') ? $table2->name()
+        :                              $table2->table()->name();
 
-    my %fks =
-        ( map { $_->id() => $_ }
-          grep { $_->has_tables( $name1, $name2 ) }
-          map { values %{ $self->_fks()->{$name1}{$_} } }
-          keys %{ $self->_fks()->{$name1} || {} }
-        );
+    my %fks = (
+        map { $_->id() => $_ }
+            grep { $_->has_tables( $name1, $name2 ) }
+            map { values %{ $self->_fks()->{$name1}{$_} } }
+            keys %{ $self->_fks()->{$name1} || {} }
+    );
 
     return values %fks
         unless grep { blessed $_ && $_->is_alias() } $table1, $table2;
@@ -180,16 +169,33 @@ sub foreign_keys_between_tables
 
     my @fks;
 
-    for my $fk ( values %fks )
-    {
-        my %p =
-            $table1->name() eq $fk->source_table()->name()
-            ? ( source_columns => [ $table1->columns( map { $_->name() } @{ $fk->source_columns() } ) ],
-                target_columns => [ $table2->columns( map { $_->name() } @{ $fk->target_columns() } ) ],
-              )
-            : ( source_columns => [ $table2->columns( map { $_->name() } @{ $fk->source_columns() } ) ],
-                target_columns => [ $table1->columns( map { $_->name() } @{ $fk->target_columns() } ) ],
-              );
+    for my $fk ( values %fks ) {
+        my %p
+            = $table1->name() eq $fk->source_table()->name()
+            ? (
+            source_columns => [
+                $table1->columns(
+                    map { $_->name() } @{ $fk->source_columns() }
+                )
+            ],
+            target_columns => [
+                $table2->columns(
+                    map { $_->name() } @{ $fk->target_columns() }
+                )
+            ],
+            )
+            : (
+            source_columns => [
+                $table2->columns(
+                    map { $_->name() } @{ $fk->source_columns() }
+                )
+            ],
+            target_columns => [
+                $table1->columns(
+                    map { $_->name() } @{ $fk->target_columns() }
+                )
+            ],
+            );
 
         push @fks, Fey::FK->new(%p);
     }
@@ -197,17 +203,23 @@ sub foreign_keys_between_tables
     return @fks;
 }
 
-no Moose;
-
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Represents a schema and contains tables and foreign keys
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Schema - Represents a schema and contains tables and foreign keys
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -304,19 +316,24 @@ C<Fey::Table::Alias> objects. If you provide any aliases, the foreign
 keys returned will contain columns from those aliases, not the real
 tables. This provides support for joining an alias in a SQL statement.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

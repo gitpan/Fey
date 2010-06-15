@@ -1,11 +1,13 @@
 package Fey::Literal::Function;
+BEGIN {
+  $Fey::Literal::Function::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
-our $VERSION = '0.34';
-
-use Fey::Types;
+use Fey::Types qw( ArrayRefOfFunctionArgs Str );
 use Scalar::Util qw( blessed );
 
 use Moose;
@@ -13,63 +15,65 @@ use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
 with 'Fey::Role::Comparable',
-     'Fey::Role::Selectable',
-     'Fey::Role::Orderable',
-     'Fey::Role::Groupable' => { excludes => 'is_groupable' },
-     'Fey::Role::IsLiteral';
+    'Fey::Role::Selectable',
+    'Fey::Role::Orderable',
+    'Fey::Role::Groupable' => { excludes => 'is_groupable' },
+    'Fey::Role::IsLiteral';
 
-with 'Fey::Role::HasAliasName' =>
-    { generated_alias_prefix => 'FUNCTION' };
+with 'Fey::Role::HasAliasName' => { generated_alias_prefix => 'FUNCTION' };
 
-has 'function' =>
-    ( is       => 'ro',
-      isa      => 'Str',
-      required => 1,
-    );
+has 'function' => (
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
+);
 
-has 'args' =>
-    ( is         => 'ro',
-      isa        => 'Fey::Types::ArrayRefOfFunctionArgs',
-      default    => sub { [] },
-      coerce     => 1,
-    );
+has 'args' => (
+    is      => 'ro',
+    isa     => ArrayRefOfFunctionArgs,
+    default => sub { [] },
+    coerce  => 1,
+);
 
-sub BUILDARGS
-{
+sub BUILDARGS {
     my $class = shift;
 
-    return { function => shift,
-             args     => [ @_ ],
-           };
+    return {
+        function => shift,
+        args     => [@_],
+    };
 }
 
-sub sql
-{
+sub sql {
     my $sql = $_[0]->function();
     $sql .= '(';
 
-    $sql .=
-        ( join ', ',
-          map { $_->sql( $_[1] ) }
-          @{ $_[0]->args() }
-        );
+    $sql .= (
+        join ', ',
+        map { $_->sql( $_[1] ) } @{ $_[0]->args() }
+    );
     $sql .= ')';
 }
 
 sub is_groupable { $_[0]->alias_name() ? 1 : 0 }
 
-no Moose;
-no Moose::Util::TypeConstraints;
-
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Represents a literal function in a SQL statement
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Literal::Function - Represents a literal function in a SQL statement
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -142,19 +146,24 @@ function is called when a function is used in the C<SELECT> clause of
 a query. A function must be used in a C<SELECT> in order to be used in
 a C<GROUP BY> or C<ORDER BY> clause.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

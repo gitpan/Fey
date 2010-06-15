@@ -1,26 +1,27 @@
 package Fey::Role::ColumnLike;
+BEGIN {
+  $Fey::Role::ColumnLike::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use Moose::Role;
 
 # This seems weird, but basically we're saying that column-like things
 # do these four roles, but the implementation is different for
 # column-like things (than for example, selectable things).
-with ( 'Fey::Role::Selectable' => { excludes => 'is_selectable' },
-       'Fey::Role::Comparable' => { excludes => 'is_comparable' },
-       'Fey::Role::Groupable'  => { excludes => 'is_groupable' },
-       'Fey::Role::Orderable'  => { excludes => 'is_orderable' },
-     );
+with(
+    'Fey::Role::Selectable' => { excludes => 'is_selectable' },
+    'Fey::Role::Comparable' => { excludes => 'is_comparable' },
+    'Fey::Role::Groupable'  => { excludes => 'is_groupable' },
+    'Fey::Role::Orderable'  => { excludes => 'is_orderable' },
+);
 
 requires '_build_id', 'is_alias';
 
-
-sub _containing_table_name_or_alias
-{
+sub _containing_table_name_or_alias {
     my $t = $_[0]->table();
 
     $t->is_alias() ? $t->alias_name() : $t->name();
@@ -30,19 +31,25 @@ sub is_selectable { return $_[0]->table() ? 1 : 0 }
 
 sub is_comparable { return $_[0]->table() ? 1 : 0 }
 
-sub is_groupable  { return $_[0]->table() ? 1 : 0 }
+sub is_groupable { return $_[0]->table() ? 1 : 0 }
 
-sub is_orderable  { return $_[0]->table() ? 1 : 0 }
-
-no Moose::Role;
+sub is_orderable { return $_[0]->table() ? 1 : 0 }
 
 1;
 
-__END__
+# ABSTRACT: A role for "column-like" behavior
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Role::ColumnLike - A role for "column-like" behavior
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -77,19 +84,24 @@ This class does the C<Fey::Role::Selectable>,
 C<Fey::Role::Comparable>, C<Fey::Role::Groupable>, and
 C<Fey::Role::Orderable> roles.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

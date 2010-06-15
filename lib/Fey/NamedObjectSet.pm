@@ -1,38 +1,39 @@
 package Fey::NamedObjectSet;
+BEGIN {
+  $Fey::NamedObjectSet::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use List::AllUtils qw( all pairwise );
 
-use Fey::Types;
+use Fey::Types qw( HashRef Named );
 
 use Moose;
 
-has '_set' =>
-    ( traits   => [ 'Hash' ],
-      is       => 'bare',
-      isa      => 'HashRef[Fey::Role::Named]',
-      handles  => { _get    => 'get',
-                    _add    => 'set',
-                    _delete => 'delete',
-                    _all    => 'values',
-                    _keys   => 'keys',
-                   },
-      required => 1,
-    );
+has '_set' => (
+    traits  => ['Hash'],
+    is      => 'bare',
+    isa     => HashRef[Named],
+    handles => {
+        _get    => 'get',
+        _add    => 'set',
+        _delete => 'delete',
+        _all    => 'values',
+        _keys   => 'keys',
+    },
+    required => 1,
+);
 
-sub BUILDARGS
-{
+sub BUILDARGS {
     my $class = shift;
 
     return { _set => { map { $_->name() => $_ } @_ } };
 }
 
-sub add
-{
+sub add {
     my $self = shift;
 
     $self->_add( map { $_->name() => $_ } @_ );
@@ -40,8 +41,7 @@ sub add
     return;
 }
 
-sub delete
-{
+sub delete {
     my $self = shift;
 
     $self->_delete( map { $_->name() } @_ );
@@ -49,24 +49,21 @@ sub delete
     return;
 }
 
-sub object
-{
+sub object {
     my $self = shift;
 
     return $self->_get(shift);
 }
 
-sub objects
-{
+sub objects {
     my $self = shift;
 
     return $self->_all() unless @_;
 
-    return grep { defined } $self->_get(@_);
+    return grep {defined} $self->_get(@_);
 }
 
-sub is_same_as
-{
+sub is_same_as {
     my $self  = shift;
     my $other = shift;
 
@@ -75,18 +72,24 @@ sub is_same_as
 
     return 0 unless @self_names == @other_names;
 
-    return all { $_ } pairwise { $a eq $b } @self_names, @other_names;
+    return all {$_} pairwise { $a eq $b } @self_names, @other_names;
 }
-
-no Moose;
 
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
+
+__END__
+=pod
+
 =head1 NAME
 
-Fey::NamedObjectSet - Holds a set of named objects
+Fey::NamedObjectSet
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -136,19 +139,21 @@ given any arguments it returns all of the objects in the set.
 Given a C<Fey::NamedObjectSet>, this method indicates whether or not
 the two sets are the same.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+

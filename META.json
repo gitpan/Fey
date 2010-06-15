@@ -1,0 +1,65 @@
+{
+   "abstract" : "Better SQL Generation Through Perl",
+   "author" : [
+      "Dave Rolsky <autarch@urth.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.101612, CPAN::Meta::Converter version 2.101591",
+   "license" : [
+      "artistic_2"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Fey",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.31"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Exception::Class" : 0,
+            "Exporter" : 0,
+            "List::AllUtils" : 0,
+            "Moose" : "0.90",
+            "MooseX::Params::Validate" : "0.08",
+            "MooseX::Role::Parameterized" : "0.04",
+            "MooseX::SemiAffordanceAccessor" : "0.03",
+            "MooseX::StrictConstructor" : "0.07",
+            "MooseX::Types" : 0,
+            "Scalar::Util" : 0,
+            "Task::Weaken" : "0.99",
+            "namespace::autoclean" : 0
+         }
+      },
+      "test" : {
+         "recommends" : {
+            "Test::Memory::Cycle" : 0
+         },
+         "requires" : {
+            "DBI" : 0,
+            "Fey::Test" : "0.05",
+            "File::Temp" : 0,
+            "Test::MockObject" : 0,
+            "Test::More" : "0.88"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "mailto" : "bug-fey@rt.cpan.org",
+         "web" : "http://rt.cpan.org/NoAuth/Bugs.html?Dist=Fey"
+      },
+      "repository" : {
+         "type" : "hg",
+         "url" : "http://hg.urth.org/hg/Fey",
+         "web" : "http://hg.urth.org/hg/Fey"
+      }
+   },
+   "version" : "0.35"
+}
+

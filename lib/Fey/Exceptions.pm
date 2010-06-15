@@ -1,38 +1,41 @@
 package Fey::Exceptions;
+BEGIN {
+  $Fey::Exceptions::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
 
-our $VERSION = '0.34';
-
 my %E;
-BEGIN
-{
-    %E = ( 'Fey::Exception' =>
-           { description =>
-             'Generic exception within the Alzabo API.  Should only be used as a base class.',
-           },
 
-           'Fey::Exception::ObjectState' =>
-           { description =>
-             'You called a method on an object which its current state does not allow',
-             isa => 'Fey::Exception',
-             alias => 'object_state_error',
-           },
+BEGIN {
+    %E = (
+        'Fey::Exception' => {
+            description =>
+                'Generic exception within the Alzabo API.  Should only be used as a base class.',
+        },
 
-           'Fey::Exception::Params' =>
-           { description => 'An exception generated when there is an error in the parameters passed in a method of function call',
-             isa => 'Fey::Exception',
-             alias => 'param_error',
-           },
+        'Fey::Exception::ObjectState' => {
+            description =>
+                'You called a method on an object which its current state does not allow',
+            isa   => 'Fey::Exception',
+            alias => 'object_state_error',
+        },
 
-           'Fey::Exception::VirtualMethod' =>
-           { description =>
-             'Indicates that the method called must be subclassed in the appropriate class',
-             isa    => 'Fey::Exception',
-             alias  => 'virtual_method',
-           },
-         );
+        'Fey::Exception::Params' => {
+            description =>
+                'An exception generated when there is an error in the parameters passed in a method of function call',
+            isa   => 'Fey::Exception',
+            alias => 'param_error',
+        },
+
+        'Fey::Exception::VirtualMethod' => {
+            description =>
+                'Indicates that the method called must be subclassed in the appropriate class',
+            isa   => 'Fey::Exception',
+            alias => 'virtual_method',
+        },
+    );
 }
 
 use Exception::Class (%E);
@@ -43,14 +46,21 @@ use base 'Exporter';
 
 our @EXPORT_OK = map { $_->{alias} || () } values %E;
 
-
 1;
 
-__END__
+# ABSTRACT: Defines exceptions used in the core Fey classes
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Exceptions - Defines exceptions used in the core Fey classes
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -93,19 +103,24 @@ passed to a method.
 This exception indicates that a virtual method was not overridden in
 the subclass on which it was called.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

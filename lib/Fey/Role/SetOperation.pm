@@ -1,76 +1,72 @@
 package Fey::Role::SetOperation;
+BEGIN {
+  $Fey::Role::SetOperation::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
-our $VERSION = '0.34';
-
-use Fey::Types;
+use Fey::Types qw( ArrayRef Bool SetOperationArg Str );
 
 use MooseX::Role::Parameterized;
 use MooseX::Params::Validate qw( pos_validated_list );
 
-parameter keyword =>
-(
-    isa => 'Str',
+parameter keyword => (
+    isa      => Str,
     required => 1,
 );
 
 with 'Fey::Role::Comparable',
-     'Fey::Role::SQL::HasOrderByClause',
-     'Fey::Role::SQL::HasLimitClause',
-     'Fey::Role::SQL::ReturnsData';
+    'Fey::Role::SQL::HasOrderByClause',
+    'Fey::Role::SQL::HasLimitClause',
+    'Fey::Role::SQL::ReturnsData';
 
-has 'is_all' =>
-    ( is      => 'rw',
-      isa     => 'Bool',
-      default => 0,
-      writer  => '_set_is_all',
-    );
+has 'is_all' => (
+    is      => 'rw',
+    isa     => Bool,
+    default => 0,
+    writer  => '_set_is_all',
+);
 
-has '_set_elements' =>
-    ( traits   => [ 'Array' ],
-      is       => 'bare',
-      isa      => 'ArrayRef[Fey::Types::SetOperationArg]',
-      default  => sub { [] },
-      handles  => { _add_set_elements  => 'push',
-                    _set_element_count => 'count',
-                    _set_elements      => 'elements',
-                  },
-      init_arg => undef,
-    );
+has '_set_elements' => (
+    traits  => ['Array'],
+    is      => 'bare',
+    isa     => ArrayRef[SetOperationArg],
+    default => sub { [] },
+    handles => {
+        _add_set_elements  => 'push',
+        _set_element_count => 'count',
+        _set_elements      => 'elements',
+    },
+    init_arg => undef,
+);
 
-sub id
-{
-    return $_[0]->sql( 'Fey::FakeDBI' );
+sub id {
+    return $_[0]->sql('Fey::FakeDBI');
 }
 
-sub all
-{
+sub all {
     $_[0]->_set_is_all(1);
     return $_[0];
 }
 
-sub bind_params
-{
+sub bind_params {
     my $self = shift;
     return map { $_->bind_params } $self->_set_elements();
 }
 
-sub select_clause_elements
-{
-    return ( $_[0]->_set_elements())[0]->select_clause_elements();
+sub select_clause_elements {
+    return ( $_[0]->_set_elements() )[0]->select_clause_elements();
 }
 
-role
-{
+role {
     my $p     = shift;
     my %extra = @_;
 
     my $name = lc $p->keyword();
 
-    method 'keyword_clause' => sub
-    {
+    method 'keyword_clause' => sub {
         my $self = shift;
 
         my $sql = uc($name);
@@ -80,65 +76,67 @@ role
 
     my $clause_method = $name . '_clause';
 
-    method 'sql' => sub
-    {
+    method 'sql' => sub {
         my $self = shift;
         my $dbh  = shift;
 
-        return
-            ( join q{ },
-              $self->$clause_method($dbh),
-              $self->order_by_clause($dbh),
-              $self->limit_clause($dbh),
-            );
+        return (
+            join q{ },
+            $self->$clause_method($dbh),
+            $self->order_by_clause($dbh),
+            $self->limit_clause($dbh),
+        );
     };
 
-    method $name => sub
-    {
+    method $name => sub {
         my $self = shift;
 
         my $count = @_;
         $count = 2
             if $count < 2 && $self->_set_element_count() < 2;
 
-        my (@set) = 
-            pos_validated_list( \@_,
-                                ( ( { isa => 'Fey::Types::SetOperationArg' } ) x $count ),
-                                MX_PARAMS_VALIDATE_NO_CACHE => 1,
-                              );
+        my (@set) = pos_validated_list(
+            \@_,
+            ( ( { isa => SetOperationArg } ) x $count ),
+            MX_PARAMS_VALIDATE_NO_CACHE => 1,
+        );
 
         $self->_add_set_elements(@set);
 
         return $self;
     };
 
-    method $clause_method => sub
-    {
+    method $clause_method => sub {
         my $self = shift;
         my $dbh  = shift;
 
-        return
-            ( join q{ } . $self->keyword_clause($dbh) . q{ },
-              map { '(' . $_->sql($dbh) . ')' }
-              $self->_set_elements()
-            );
+        return (
+            join q{ } . $self->keyword_clause($dbh) . q{ },
+            map { '(' . $_->sql($dbh) . ')' } $self->_set_elements()
+        );
     };
 
-    with 'Fey::Role::HasAliasName'
-          => { generated_alias_prefix => uc $name,
-               sql_needs_parens       => 1,
-             };
+    with 'Fey::Role::HasAliasName' => {
+        generated_alias_prefix => uc $name,
+        sql_needs_parens       => 1,
+    };
 };
-
-no MooseX::Role::Parameterized;
 
 1;
 
-__END__
+# ABSTRACT: A role for things that are a set operation
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Role::SetOperation - A role for things that are a set operation
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -201,19 +199,24 @@ C<keyword_clause>.
 This class includes C<Fey::Role::SQL::HasOrderByClause>,
 C<Fey::Role::SQL::HasLimitClause>, and C<Fey::Role::SQL::HasAliasName>.
 
-=head1 AUTHOR
-
-Hans Dieter Pearcey <hdp.cpan.fey@weftsoar.net>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

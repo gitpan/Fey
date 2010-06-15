@@ -1,21 +1,21 @@
 package Fey::Role::SQL::Cloneable;
+BEGIN {
+  $Fey::Role::SQL::Cloneable::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use MooseX::Role::Parameterized;
 
-parameter 'real_class' =>
-    ( isa => 'Moose::Meta::Class' );
+parameter 'real_class' => ( isa => 'Moose::Meta::Class' );
 
 # Yeah, I could've used MooseX::Clone, but avoiding the meta-API at
 # runtime makes this all much faster. Of course, it's probably the
 # root of all evil. OTOH, it's encapsulated in a role, so we can
 # always replace it with an actual use of MX::Clone easily enough.
-role
-{
+role {
     my $p     = shift;
     my %extra = @_;
 
@@ -26,33 +26,28 @@ role
     # applied to the real consuming class.
     my $meta = $p->real_class() ? $p->real_class() : $extra{consumer};
 
-    for my $attr ( grep { $_->has_type_constraint() } $meta->get_all_attributes() )
-    {
+    for my $attr ( grep { $_->has_type_constraint() }
+        $meta->get_all_attributes() ) {
         my $type = $attr->type_constraint();
 
-        if ( $type->is_a_type_of('ArrayRef') )
-        {
+        if ( $type->is_a_type_of('ArrayRef') ) {
             push @array_attr, $attr->name();
         }
-        elsif ( $type->is_a_type_of('HashRef') )
-        {
+        elsif ( $type->is_a_type_of('HashRef') ) {
             push @hash_attr, $attr->name();
         }
     }
 
-    method clone => sub
-    {
+    method clone => sub {
         my $self = shift;
 
         my $clone = bless { %{$self} }, ref $self;
 
-        for my $name (@array_attr)
-        {
+        for my $name (@array_attr) {
             $clone->{$name} = [ @{ $self->{$name} } ];
         }
 
-        for my $name (@hash_attr)
-        {
+        for my $name (@hash_attr) {
             $clone->{$name} = { %{ $self->{$name} } };
         }
 
@@ -60,15 +55,21 @@ role
     };
 };
 
-no MooseX::Role::Parameterized;
-
 1;
 
-__END__
+# ABSTRACT: Adds a just-deep-enough clone() method to SQL objects
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Role::SQL::Cloneable - Adds a just-deep-enough clone() method to SQL objects
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -89,19 +90,24 @@ This role provides the following methods:
 
 Returns a new object which is a clone of the original.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

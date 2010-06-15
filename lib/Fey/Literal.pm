@@ -1,9 +1,11 @@
 package Fey::Literal;
+BEGIN {
+  $Fey::Literal::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use Fey::FakeDBI;
 use Fey::Literal::Function;
@@ -22,8 +24,7 @@ use Moose;
 use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
-sub new_from_scalar
-{
+sub new_from_scalar {
     shift;
     my $val = shift;
 
@@ -33,8 +34,8 @@ sub new_from_scalar
     # Freaking Perl overloading is so broken! An overloaded reference
     # will not pass the type constraints, so we need to manually
     # convert it to a non-ref.
-    if ( blessed $val && overload::Overloaded( $val ) )
-    {
+    if ( blessed $val && overload::Overloaded($val) ) {
+
         # The stringification method will be derived from the
         # numification method if needed. This might produce strange
         # results in the case of something that overloads both
@@ -45,21 +46,27 @@ sub new_from_scalar
     }
 
     return looks_like_number($val)
-           ? Fey::Literal::Number->new($val)
-           : Fey::Literal::String->new($val);
+        ? Fey::Literal::Number->new($val)
+        : Fey::Literal::String->new($val);
 }
-
-no Moose;
 
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Factory for making a literal piece of a SQL statement
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Literal - Factory for making a literal piece of a SQL statement
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -81,19 +88,24 @@ the appropriate subclass. This will be either a
 C<Fey::Literal::String>, C<Fey::Literal::Number>, or
 C<Fey::Literal::Null>.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

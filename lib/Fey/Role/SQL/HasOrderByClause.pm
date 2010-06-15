@@ -1,47 +1,47 @@
 package Fey::Role::SQL::HasOrderByClause;
+BEGIN {
+  $Fey::Role::SQL::HasOrderByClause::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
-our $VERSION = '0.34';
-
-use Fey::Types;
+use Fey::Types qw( ArrayRef OrderByElement );
 use Scalar::Util qw( blessed );
 
 use Moose::Role;
 use MooseX::Params::Validate qw( pos_validated_list );
 
-has '_order_by' =>
-    ( traits   => [ 'Array' ],
-      is       => 'bare',
-      isa      => 'ArrayRef',
-      default  => sub { [] },
-      handles  => { _add_order_by_elements => 'push',
-                    _has_order_by_elements => 'count',
-                    _order_by              => 'elements',
-                  },
-      init_arg => undef,
-    );
+has '_order_by' => (
+    traits  => ['Array'],
+    is      => 'bare',
+    isa     => ArrayRef,
+    default => sub { [] },
+    handles => {
+        _add_order_by_elements => 'push',
+        _has_order_by_elements => 'count',
+        _order_by              => 'elements',
+    },
+    init_arg => undef,
+);
 
-
-sub order_by
-{
+sub order_by {
     my $self = shift;
 
     my $count = @_ ? @_ : 1;
-    my (@by) =
-        pos_validated_list( \@_,
-                            ( ( { isa => 'Fey::Types::OrderByElement' } ) x $count ),
-                            MX_PARAMS_VALIDATE_NO_CACHE => 1,
-                          );
+    my (@by) = pos_validated_list(
+        \@_,
+        ( ( { isa => OrderByElement } ) x $count ),
+        MX_PARAMS_VALIDATE_NO_CACHE => 1,
+    );
 
     $self->_add_order_by_elements(@by);
 
     return $self;
 }
 
-sub order_by_clause
-{
+sub order_by_clause {
     my $self = shift;
     my $dbh  = shift;
 
@@ -51,14 +51,11 @@ sub order_by_clause
 
     my @elt = $self->_order_by();
 
-    for my $elt (@elt)
-    {
-        if ( ! blessed $elt )
-        {
+    for my $elt (@elt) {
+        if ( !blessed $elt ) {
             $sql .= q{ } . uc $elt;
         }
-        else
-        {
+        else {
             $sql .= ', ' if $elt != $elt[0];
             $sql .= $elt->sql_or_alias($dbh);
         }
@@ -67,15 +64,21 @@ sub order_by_clause
     return $sql;
 }
 
-no Moose::Role;
-
 1;
 
-__END__
+# ABSTRACT: A role for queries which can include a ORDER BY clause
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Role::SQL::HasOrderByClause - A role for queries which can include a ORDER BY clause
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -102,19 +105,24 @@ Clauses> for more details.
 Returns the C<ORDER BY> clause portion of the SQL statement as a
 string.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

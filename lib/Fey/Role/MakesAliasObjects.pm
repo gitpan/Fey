@@ -1,40 +1,42 @@
 package Fey::Role::MakesAliasObjects;
+BEGIN {
+  $Fey::Role::MakesAliasObjects::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
-our $VERSION = '0.34';
+use Fey::Types qw( ClassName Str );
 
 use MooseX::Role::Parameterized;
 
-parameter 'alias_class' =>
-    ( is       => 'ro',
-      isa      => 'ClassName',
-      required => 1,
-    );
+parameter 'alias_class' => (
+    is       => 'ro',
+    isa      => ClassName,
+    required => 1,
+);
 
-parameter 'self_param' =>
-    ( is       => 'ro',
-      isa      => 'Str',
-      required => 1,
-    );
+parameter 'self_param' => (
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
+);
 
-parameter 'name_param' =>
-    ( is       => 'ro',
-      isa      => 'Str',
-      default  => 'alias_name',
-    );
+parameter 'name_param' => (
+    is      => 'ro',
+    isa     => Str,
+    default => 'alias_name',
+);
 
-role
-{
+role {
     my $p = shift;
 
     my $alias_class = $p->alias_class();
     my $self_param  = $p->self_param();
     my $name_param  = $p->name_param();
 
-    method 'alias' => sub
-    {
+    method 'alias' => sub {
         my $self = shift;
         my %p = @_ == 1 ? ( $name_param => $_[0] ) : @_;
 
@@ -42,15 +44,21 @@ role
     };
 };
 
-no MooseX::Role::Parameterized;
-
 1;
 
-__END__
+# ABSTRACT: A role for objects with separate alias objects
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Role::MakesAliasObjects - A role for objects with separate alias objects
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -98,19 +106,24 @@ Create a new alias for this object.  If a single parameter is
 provided, it is assumed to be whatever the C<name_param> parameter
 specifies (see above).
 
-=head1 AUTHOR
-
-Hans Dieter Pearcey <hdp.cpan.fey@weftsoar.net>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

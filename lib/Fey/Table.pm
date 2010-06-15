@@ -1,16 +1,20 @@
 package Fey::Table;
+BEGIN {
+  $Fey::Table::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use Fey::Column;
 use Fey::Exceptions qw( param_error );
 use Fey::NamedObjectSet;
 use Fey::Schema;
 use Fey::Table::Alias;
-use Fey::Types;
+use Fey::Types qw(
+    ArrayRef Bool HashRef Str Undef Column ColumnOrName NamedObjectSet Schema
+);
 use List::AllUtils qw( any all first_index );
 use Scalar::Util qw( blessed weaken );
 
@@ -22,100 +26,99 @@ use Moose::Util::TypeConstraints;
 
 with 'Fey::Role::TableLike';
 
-with 'Fey::Role::MakesAliasObjects' =>
-    { self_param  => 'table',
-      alias_class => 'Fey::Table::Alias',
-    };
+with 'Fey::Role::MakesAliasObjects' => {
+    self_param  => 'table',
+    alias_class => 'Fey::Table::Alias',
+};
 
-has 'id' =>
-    ( is         => 'ro',
-      lazy_build => 1,
-      init_arg   => undef,
-    );
+has 'id' => (
+    is         => 'ro',
+    lazy_build => 1,
+    init_arg   => undef,
+);
 
-has 'name' =>
-    ( is       => 'ro',
-      isa      => 'Str',
-      required => 1,
-    );
+has 'name' => (
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
+);
 
-has 'is_view' =>
-    ( is      => 'ro',
-      isa     => 'Bool',
-      default => 0,
-    );
+has 'is_view' => (
+    is      => 'ro',
+    isa     => Bool,
+    default => 0,
+);
 
-has '_keys' =>
-    ( traits  => [ 'Array' ],
-      is      => 'bare',
-      isa     => 'Fey::Types::ArrayRefOfNamedObjectSets',
-      default => sub { [] },
-      handles => { _keys       => 'elements',
-                   _add_key    => 'push',
-                   _delete_key => 'delete',
-                 },
+has '_keys' => (
+    traits  => ['Array'],
+    is      => 'bare',
+    isa     => ArrayRef[NamedObjectSet],
+    default => sub { [] },
+    handles => {
+        _keys       => 'elements',
+        _add_key    => 'push',
+        _delete_key => 'delete',
+    },
 
-    );
+);
 
-has '_columns' =>
-    ( is      => 'ro',
-      isa     => 'Fey::NamedObjectSet',
-      default => sub { return Fey::NamedObjectSet->new() },
-      handles => { columns => 'objects',
-                   column  => 'object',
-                 },
-    );
+has '_columns' => (
+    is      => 'ro',
+    isa     => NamedObjectSet,
+    default => sub { return Fey::NamedObjectSet->new() },
+    handles => {
+        columns => 'objects',
+        column  => 'object',
+    },
+);
 
-has 'schema' =>
-    ( is        => 'rw',
-      isa       => 'Undef | Fey::Schema',
-      weak_ref  => 1,
-      writer    => '_set_schema',
-      clearer   => '_clear_schema',
-      predicate => 'has_schema',
-    );
+has 'schema' => (
+    is        => 'rw',
+    isa       => Undef | Schema,
+    weak_ref  => 1,
+    writer    => '_set_schema',
+    clearer   => '_clear_schema',
+    predicate => 'has_schema',
+);
 
-has 'candidate_keys' =>
-    ( is         => 'ro',
-      isa        => 'ArrayRef[ArrayRef[Fey::Column]]',
-      clearer    => '_clear_candidate_keys',
-      lazy_build => 1,
-      init_arg   => undef,
-    );
+has 'candidate_keys' => (
+    is         => 'ro',
+    isa        => ArrayRef[ArrayRef[Column]],
+    clearer    => '_clear_candidate_keys',
+    lazy_build => 1,
+    init_arg   => undef,
+);
 
-after '_add_key', '_delete_key' =>
-    sub { $_[0]->_clear_candidate_keys() };
+after '_add_key', '_delete_key' => sub { $_[0]->_clear_candidate_keys() };
 
-has 'primary_key' =>
-    ( is         => 'ro',
-      isa        => 'ArrayRef[Fey::Column]',
-      clearer    => '_clear_primary_key',
-      lazy_build => 1,
-      init_arg   => undef,
-    );
+has 'primary_key' => (
+    is         => 'ro',
+    isa        => ArrayRef[Column],
+    clearer    => '_clear_primary_key',
+    lazy_build => 1,
+    init_arg   => undef,
+);
 
-after '_clear_candidate_keys' =>
-    sub { $_[0]->_clear_primary_key() };
+after '_clear_candidate_keys' => sub { $_[0]->_clear_primary_key() };
 
-has '_aliased_tables' =>
-    ( traits  => [ 'Hash' ],
-      is      => 'bare',
-      isa     => 'HashRef',
-      lazy    => 1,
-      default => sub { {} },
-      handles => { _aliased_table       => 'get',
-                   _store_aliased_table => 'set',
-                   _has_aliased_table   => 'exists',
-                 },
-    );
+has '_aliased_tables' => (
+    traits  => ['Hash'],
+    is      => 'bare',
+    isa     => HashRef,
+    lazy    => 1,
+    default => sub { {} },
+    handles => {
+        _aliased_table       => 'get',
+        _store_aliased_table => 'set',
+        _has_aliased_table   => 'exists',
+    },
+);
 
 with 'Fey::Role::Named';
 
-
-sub add_column
-{
+sub add_column {
     my $self = shift;
-    my ($col) = pos_validated_list( \@_, { isa => 'Fey::Column' } );
+    my ($col) = pos_validated_list( \@_, { isa => Column } );
 
     my $name = $col->name();
     param_error "The table already has a column named $name."
@@ -128,27 +131,24 @@ sub add_column
     return $self;
 }
 
-sub remove_column
-{
+sub remove_column {
     my $self = shift;
-    my ($col) = pos_validated_list( \@_, { isa => 'Fey::Types::ColumnOrName' } );
+    my ($col)
+        = pos_validated_list( \@_, { isa => ColumnOrName } );
 
     $col = $self->column($col)
         unless blessed $col;
 
-    if ( my $schema = $self->schema() )
-    {
+    if ( my $schema = $self->schema() ) {
         for my $fk ( grep { $_->has_column($col) }
-                     $schema->foreign_keys_for_table($self) )
-        {
+            $schema->foreign_keys_for_table($self) ) {
             $schema->remove_foreign_key($fk);
         }
     }
 
     my $name = $col->name();
 
-    for my $k ( $self->_keys() )
-    {
+    for my $k ( $self->_keys() ) {
         $self->remove_candidate_key( $k->objects() )
             if $k->object($name);
     }
@@ -160,15 +160,13 @@ sub remove_column
     return $self;
 }
 
-sub _build_candidate_keys
-{
+sub _build_candidate_keys {
     my $self = shift;
 
     return [ map { [ $_->objects() ] } $self->_keys() ];
 }
 
-sub _build_primary_key
-{
+sub _build_primary_key {
     my $self = shift;
 
     my $keys = $self->candidate_keys();
@@ -176,24 +174,24 @@ sub _build_primary_key
     return $keys->[0] || [];
 }
 
-sub add_candidate_key
-{
+sub add_candidate_key {
     my $self = shift;
 
     my $count = @_ ? @_ : 1;
-    my (@cols) =
-        pos_validated_list( \@_,
-                            ( ( { isa => 'Fey::Types::ColumnOrName' } ) x $count ),
-                            MX_PARAMS_VALIDATE_NO_CACHE => 1,
-                          );
+    my (@cols) = pos_validated_list(
+        \@_,
+        ( ( { isa => ColumnOrName } ) x $count ),
+        MX_PARAMS_VALIDATE_NO_CACHE => 1,
+    );
 
-    for my $name ( map { blessed $_ ? $_->name() : $_ } @cols )
-    {
-        param_error "The column $name is not part of the " . $self->name() . ' table.'
+    for my $name ( map { blessed $_ ? $_->name() : $_ } @cols ) {
+        param_error "The column $name is not part of the "
+            . $self->name()
+            . ' table.'
             unless $self->column($name);
     }
 
-    $_ = $self->column($_) for grep { ! blessed $_ } @cols;
+    $_ = $self->column($_) for grep { !blessed $_ } @cols;
 
     return if $self->has_candidate_key(@cols);
 
@@ -202,24 +200,24 @@ sub add_candidate_key
     return;
 }
 
-sub remove_candidate_key
-{
+sub remove_candidate_key {
     my $self = shift;
 
     my $count = @_ ? @_ : 1;
-    my (@cols) =
-        pos_validated_list( \@_,
-                            ( ( { isa => 'Fey::Types::ColumnOrName' } ) x $count ),
-                            MX_PARAMS_VALIDATE_NO_CACHE => 1,
-                          );
+    my (@cols) = pos_validated_list(
+        \@_,
+        ( ( { isa => ColumnOrName } ) x $count ),
+        MX_PARAMS_VALIDATE_NO_CACHE => 1,
+    );
 
-    for my $name ( map { blessed $_ ? $_->name() : $_ } @cols )
-    {
-        param_error "The column $name is not part of the " . $self->name() . ' table.'
+    for my $name ( map { blessed $_ ? $_->name() : $_ } @cols ) {
+        param_error "The column $name is not part of the "
+            . $self->name()
+            . ' table.'
             unless $self->column($name);
     }
 
-    $_ = $self->column($_) for grep { ! blessed $_ } @cols;
+    $_ = $self->column($_) for grep { !blessed $_ } @cols;
 
     my $set = Fey::NamedObjectSet->new(@cols);
 
@@ -231,30 +229,29 @@ sub remove_candidate_key
     return;
 }
 
-sub has_candidate_key
-{
+sub has_candidate_key {
     my $self = shift;
 
     my $count = @_ ? @_ : 1;
-    my (@cols) =
-        pos_validated_list( \@_,
-                            ( ( { isa => 'Fey::Types::ColumnOrName' } ) x $count ),
-                            MX_PARAMS_VALIDATE_NO_CACHE => 1,
-                          );
+    my (@cols) = pos_validated_list(
+        \@_,
+        ( ( { isa => ColumnOrName } ) x $count ),
+        MX_PARAMS_VALIDATE_NO_CACHE => 1,
+    );
 
-    for my $name ( map { blessed $_ ? $_->name() : $_ } @cols )
-    {
-        param_error "The column $name is not part of the " . $self->name() . ' table.'
+    for my $name ( map { blessed $_ ? $_->name() : $_ } @cols ) {
+        param_error "The column $name is not part of the "
+            . $self->name()
+            . ' table.'
             unless $self->column($name);
     }
 
-    $_ = $self->column($_) for grep { ! blessed $_ } @cols;
+    $_ = $self->column($_) for grep { !blessed $_ } @cols;
 
     my $set = Fey::NamedObjectSet->new(@cols);
 
-    return 1 if
-        any { $_->is_same_as($set) }
-        $self->_keys();
+    return 1
+        if any { $_->is_same_as($set) } $self->_keys();
 
     return 0;
 }
@@ -262,16 +259,14 @@ sub has_candidate_key
 # Caching the objects by name prevents a weird bug where we have two
 # aliases of the same name, and one disappears because of weak
 # references, causing weird errors.
-around 'alias' => sub
-{
+around 'alias' => sub {
     my $orig = shift;
     my $self = shift;
 
     # bleh, duplicating code from Aliasable
     my %p = @_ == 1 ? ( alias_name => $_[0] ) : @_;
 
-    if ( defined $p{alias_name} )
-    {
+    if ( defined $p{alias_name} ) {
         return $self->_aliased_table( $p{alias_name} )
             if $self->_has_aliased_table( $p{alias_name} );
     }
@@ -283,10 +278,9 @@ around 'alias' => sub
     return $alias;
 };
 
-sub is_alias { 0 }
+sub is_alias {0}
 
-sub aliased_column
-{
+sub aliased_column {
     my $self   = shift;
     my $prefix = shift;
     my $name   = shift;
@@ -297,8 +291,7 @@ sub aliased_column
     return $col->alias( alias_name => $prefix . $col->name() );
 }
 
-sub aliased_columns
-{
+sub aliased_columns {
     my $self   = shift;
     my $prefix = shift;
 
@@ -307,8 +300,7 @@ sub aliased_columns
     return map { $self->aliased_column( $prefix, $_ ) } @names;
 }
 
-sub sql
-{
+sub sql {
     return $_[1]->quote_identifier( $_[0]->name() );
 }
 
@@ -316,18 +308,23 @@ sub sql_with_alias { goto &sql }
 
 sub _build_id { $_[0]->name() }
 
-no Moose;
-no Moose::Util::TypeConstraints;
-
 __PACKAGE__->meta()->make_immutable();
 
 1;
 
-__END__
+# ABSTRACT: Represents a table (or view)
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Table - Represents a table (or view)
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -496,19 +493,24 @@ Returns a unique identifier for the table.
 This class does the L<Fey::Role::TableLike>, L<Fey::Role::MakesAliasObjects>,
 and L<Fey::Role::Named> roles.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+

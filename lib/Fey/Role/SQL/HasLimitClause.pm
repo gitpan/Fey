@@ -1,38 +1,41 @@
 package Fey::Role::SQL::HasLimitClause;
+BEGIN {
+  $Fey::Role::SQL::HasLimitClause::VERSION = '0.35';
+}
 
 use strict;
 use warnings;
-
-our $VERSION = '0.34';
+use namespace::autoclean;
 
 use Scalar::Util qw( blessed );
+
+use Fey::Types qw( PosInteger PosOrZeroInteger Undef );
 
 use Moose::Role;
 use MooseX::Params::Validate qw( pos_validated_list );
 
-has '_limit' =>
-    ( is        => 'rw',
-      writer    => '_set_limit',
-      predicate => '_has_limit',
-    );
+has '_limit' => (
+    is        => 'rw',
+    writer    => '_set_limit',
+    predicate => '_has_limit',
+);
 
-has '_offset' =>
-    ( is        => 'rw',
-      writer    => '_set_offset',
-      predicate => '_has_offset',
-    );
+has '_offset' => (
+    is        => 'rw',
+    writer    => '_set_offset',
+    predicate => '_has_offset',
+);
 
-
-sub limit
-{
+sub limit {
     my $self = shift;
-    my ( $limit, $offset ) =
-        pos_validated_list( \@_,
-                            { isa      => 'Fey::Types::PosInteger|Undef' },
-                            { isa      => 'Fey::Types::PosOrZeroInteger',
-                              optional => 1,
-                            },
-                          );
+    my ( $limit, $offset ) = pos_validated_list(
+        \@_,
+        { isa => (PosInteger | Undef) },
+        {
+            isa      => PosOrZeroInteger,
+            optional => 1,
+        },
+    );
 
     $self->_set_limit($limit)
         if defined $limit;
@@ -42,8 +45,7 @@ sub limit
     return $self;
 }
 
-sub limit_clause
-{
+sub limit_clause {
     my $self = shift;
 
     return unless $self->_has_limit() || $self->_has_offset();
@@ -60,15 +62,21 @@ sub limit_clause
     return $sql;
 }
 
-no Moose::Role;
-
 1;
 
-__END__
+# ABSTRACT: A role for queries which can include a LIMIT clause
+
+
+
+=pod
 
 =head1 NAME
 
 Fey::Role::SQL::HasLimitClause - A role for queries which can include a LIMIT clause
+
+=head1 VERSION
+
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -94,19 +102,24 @@ for more details.
 
 Returns the C<LIMIT> clause portion of the SQL statement as a string.
 
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
 =head1 BUGS
 
 See L<Fey> for details on how to report bugs.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHOR
 
-Copyright 2006-2009 Dave Rolsky, All Rights Reserved.
+  Dave Rolsky <autarch@urth.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2010 by Dave Rolsky.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0
 
 =cut
+
+
+__END__
+
