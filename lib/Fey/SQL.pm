@@ -1,6 +1,6 @@
 package Fey::SQL;
 BEGIN {
-  $Fey::SQL::VERSION = '0.35';
+  $Fey::SQL::VERSION = '0.36';
 }
 
 use strict;
@@ -70,7 +70,7 @@ Fey::SQL - Documentation on SQL generation with Fey and SQL object factory
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 

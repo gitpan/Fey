@@ -1,6 +1,6 @@
 package Fey::SQL::Select;
 BEGIN {
-  $Fey::SQL::Select::VERSION = '0.35';
+  $Fey::SQL::Select::VERSION = '0.36';
 }
 
 use strict;
@@ -28,11 +28,11 @@ with 'Fey::Role::Comparable',
     'Fey::Role::SQL::ReturnsData';
 
 with 'Fey::Role::SQL::HasWhereClause' => {
-    excludes => 'bind_params',
-    alias    => { bind_params => '_where_clause_bind_params' },
+    -excludes => 'bind_params',
+    -alias    => { bind_params => '_where_clause_bind_params' },
 };
 
-with 'Fey::Role::SQL::HasBindParams' => { excludes => 'bind_params' };
+with 'Fey::Role::SQL::HasBindParams' => { -excludes => 'bind_params' };
 
 with 'Fey::Role::HasAliasName' => {
     generated_alias_prefix => 'SUBSELECT',
@@ -505,7 +505,7 @@ Fey::SQL::Select - Represents a SELECT query
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 

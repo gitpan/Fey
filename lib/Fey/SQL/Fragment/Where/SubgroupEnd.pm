@@ -1,6 +1,6 @@
 package Fey::SQL::Fragment::Where::SubgroupEnd;
 BEGIN {
-  $Fey::SQL::Fragment::Where::SubgroupEnd::VERSION = '0.35';
+  $Fey::SQL::Fragment::Where::SubgroupEnd::VERSION = '0.36';
 }
 
 use strict;
@@ -31,7 +31,7 @@ Fey::SQL::Fragment::Where::SubgroupEnd - Represents the end of a subgroup in a W
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 DESCRIPTION
 

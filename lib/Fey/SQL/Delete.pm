@@ -1,6 +1,6 @@
 package Fey::SQL::Delete;
 BEGIN {
-  $Fey::SQL::Delete::VERSION = '0.35';
+  $Fey::SQL::Delete::VERSION = '0.36';
 }
 
 use strict;
@@ -19,7 +19,7 @@ with 'Fey::Role::SQL::HasWhereClause',
     'Fey::Role::SQL::HasOrderByClause',
     'Fey::Role::SQL::HasLimitClause';
 
-with 'Fey::Role::SQL::HasBindParams' => { excludes => 'bind_params' };
+with 'Fey::Role::SQL::HasBindParams' => { -excludes => 'bind_params' };
 
 has '_from' => (
     is       => 'rw',
@@ -87,7 +87,7 @@ Fey::SQL::Delete - Represents a DELETE query
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 

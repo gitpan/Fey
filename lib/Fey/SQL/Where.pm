@@ -1,6 +1,6 @@
 package Fey::SQL::Where;
 BEGIN {
-  $Fey::SQL::Where::VERSION = '0.35';
+  $Fey::SQL::Where::VERSION = '0.36';
 }
 
 use strict;
@@ -15,7 +15,7 @@ use MooseX::StrictConstructor;
 
 with 'Fey::Role::SQL::HasWhereClause';
 
-with 'Fey::Role::SQL::HasBindParams' => { excludes => 'bind_params' };
+with 'Fey::Role::SQL::HasBindParams' => { -excludes => 'bind_params' };
 
 with 'Fey::Role::SQL::Cloneable';
 
@@ -35,7 +35,7 @@ Fey::SQL::Where - Represents a "stand-alone" WHERE clause
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 

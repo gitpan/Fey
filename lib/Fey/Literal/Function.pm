@@ -1,6 +1,6 @@
 package Fey::Literal::Function;
 BEGIN {
-  $Fey::Literal::Function::VERSION = '0.35';
+  $Fey::Literal::Function::VERSION = '0.36';
 }
 
 use strict;
@@ -17,7 +17,7 @@ use MooseX::StrictConstructor;
 with 'Fey::Role::Comparable',
     'Fey::Role::Selectable',
     'Fey::Role::Orderable',
-    'Fey::Role::Groupable' => { excludes => 'is_groupable' },
+    'Fey::Role::Groupable' => { -excludes => 'is_groupable' },
     'Fey::Role::IsLiteral';
 
 with 'Fey::Role::HasAliasName' => { generated_alias_prefix => 'FUNCTION' };
@@ -73,7 +73,7 @@ Fey::Literal::Function - Represents a literal function in a SQL statement
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,6 @@
 package Fey::FakeDBI;
 BEGIN {
-  $Fey::FakeDBI::VERSION = '0.35';
+  $Fey::FakeDBI::VERSION = '0.36';
 }
 
 use strict;
@@ -43,7 +43,7 @@ Fey::FakeDBI - Just enough of the DBI API to fool Fey
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 

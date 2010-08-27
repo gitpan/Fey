@@ -1,6 +1,6 @@
 package Fey::Role::SetOperation;
 BEGIN {
-  $Fey::Role::SetOperation::VERSION = '0.35';
+  $Fey::Role::SetOperation::VERSION = '0.36';
 }
 
 use strict;
@@ -136,7 +136,7 @@ Fey::Role::SetOperation - A role for things that are a set operation
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 

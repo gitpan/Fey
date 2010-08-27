@@ -1,6 +1,6 @@
 package Fey::Table::Alias;
 BEGIN {
-  $Fey::Table::Alias::VERSION = '0.35';
+  $Fey::Table::Alias::VERSION = '0.36';
 }
 
 use strict;
@@ -125,7 +125,7 @@ Fey::Table::Alias - Represents an alias for a table
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 

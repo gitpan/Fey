@@ -1,6 +1,6 @@
 package Fey::Role::SQL::HasLimitClause;
 BEGIN {
-  $Fey::Role::SQL::HasLimitClause::VERSION = '0.35';
+  $Fey::Role::SQL::HasLimitClause::VERSION = '0.36';
 }
 
 use strict;
@@ -76,7 +76,7 @@ Fey::Role::SQL::HasLimitClause - A role for queries which can include a LIMIT cl
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 

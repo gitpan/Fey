@@ -1,6 +1,6 @@
 package Fey::Types::Internal;
 BEGIN {
-  $Fey::Types::Internal::VERSION = '0.35';
+  $Fey::Types::Internal::VERSION = '0.36';
 }
 
 use strict;
@@ -230,7 +230,7 @@ Fey::Types::Internal - Types for use in Fey
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 DESCRIPTION
 

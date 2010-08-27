@@ -1,6 +1,6 @@
 package Fey::SQL::Fragment::Where::Comparison;
 BEGIN {
-  $Fey::SQL::Fragment::Where::Comparison::VERSION = '0.35';
+  $Fey::SQL::Fragment::Where::Comparison::VERSION = '0.36';
 }
 
 use strict;
@@ -183,7 +183,7 @@ Fey::SQL::Fragment::Where::Comparison - Represents a comparison in a WHERE claus
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 DESCRIPTION
 
