@@ -1,6 +1,6 @@
 package Fey::SQL::Fragment::Where::Boolean;
 BEGIN {
-  $Fey::SQL::Fragment::Where::Boolean::VERSION = '0.36';
+  $Fey::SQL::Fragment::Where::Boolean::VERSION = '0.37';
 }
 
 use strict;
@@ -37,7 +37,7 @@ Fey::SQL::Fragment::Where::Boolean - Represents an AND or OR in a WHERE clause
 
 =head1 VERSION
 
-version 0.36
+version 0.37
 
 =head1 DESCRIPTION
 
@@ -52,7 +52,7 @@ See L<Fey> for details on how to report bugs.
 
 =head1 AUTHOR
 
-  Dave Rolsky <autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 

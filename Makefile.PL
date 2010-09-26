@@ -39,7 +39,7 @@ my %WriteMakefileArgs = (
     'Task::Weaken' => '0.99',
     'namespace::autoclean' => '0'
   },
-  'VERSION' => '0.36',
+  'VERSION' => '0.37',
   'test' => {
     'TESTS' => 't/*.t t/Column/*.t t/SQL/*.t t/Table/*.t'
   }

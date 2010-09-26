@@ -1,6 +1,6 @@
 package Fey::FK;
 BEGIN {
-  $Fey::FK::VERSION = '0.36';
+  $Fey::FK::VERSION = '0.37';
 }
 
 use strict;
@@ -222,7 +222,7 @@ Fey::FK - Represents a foreign key
 
 =head1 VERSION
 
-version 0.36
+version 0.37
 
 =head1 SYNOPSIS
 
@@ -307,7 +307,7 @@ See L<Fey> for details on how to report bugs.
 
 =head1 AUTHOR
 
-  Dave Rolsky <autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 

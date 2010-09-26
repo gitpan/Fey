@@ -1,6 +1,6 @@
 package Fey::Table;
 BEGIN {
-  $Fey::Table::VERSION = '0.36';
+  $Fey::Table::VERSION = '0.37';
 }
 
 use strict;
@@ -57,7 +57,7 @@ has '_keys' => (
     handles => {
         _keys       => 'elements',
         _add_key    => 'push',
-        _delete_key => 'delete',
+        _delete_key => 'splice',
     },
 
 );
@@ -324,7 +324,7 @@ Fey::Table - Represents a table (or view)
 
 =head1 VERSION
 
-version 0.36
+version 0.37
 
 =head1 SYNOPSIS
 
@@ -499,7 +499,7 @@ See L<Fey> for details on how to report bugs.
 
 =head1 AUTHOR
 
-  Dave Rolsky <autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 

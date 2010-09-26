@@ -1,6 +1,6 @@
 package Fey;
 BEGIN {
-  $Fey::VERSION = '0.36';
+  $Fey::VERSION = '0.37';
 }
 
 use strict;
@@ -22,7 +22,7 @@ Fey - Better SQL Generation Through Perl
 
 =head1 VERSION
 
-version 0.36
+version 0.37
 
 =head1 SYNOPSIS
 
@@ -403,7 +403,7 @@ your bug as I make changes.
 
 =head1 AUTHOR
 
-  Dave Rolsky <autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 

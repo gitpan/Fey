@@ -1,6 +1,6 @@
 package Fey::Role::SQL::HasBindParams;
 BEGIN {
-  $Fey::Role::SQL::HasBindParams::VERSION = '0.36';
+  $Fey::Role::SQL::HasBindParams::VERSION = '0.37';
 }
 
 use strict;
@@ -46,7 +46,7 @@ Fey::Role::SQL::HasBindParams - A role for queries which can have bind parameter
 
 =head1 VERSION
 
-version 0.36
+version 0.37
 
 =head1 SYNOPSIS
 
@@ -78,7 +78,7 @@ See L<Fey> for details on how to report bugs.
 
 =head1 AUTHOR
 
-  Dave Rolsky <autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
