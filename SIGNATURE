@@ -14,66 +14,66 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 41d0d874ea84256031940c02db5403aef626dad6 Changes
+SHA1 17601e86ed27a67c91ac769d96a3e8e46685f7bb Changes
 SHA1 21a08b595687e3affd8a660243aec84a9a577552 INSTALL
 SHA1 23c628b4a8a36738405ccdacaeb912d2e727b4c0 LICENSE
 SHA1 064afc339dd18ef1b650ee85ecbbd7aa19b96da9 MANIFEST
-SHA1 7b8fec2f93e56b8bf7b7e05e7fe013163e78a795 META.json
-SHA1 f90412c1f284bfc275308563e5f9584c0aec2121 META.yml
-SHA1 5693c8167b4c26342558e3adb719dffec2e8d363 Makefile.PL
-SHA1 137abb3929d546f796cb14416b92d31b846ae277 README
-SHA1 65df4d86972390bb6ea6673bbe2334c0e7c2e180 dist.ini
-SHA1 287637c7ac7ce932a1e271a85ca2dfea4914c760 lib/Fey.pm
-SHA1 0771dafac5dc8085ef31c15340f427351632ac00 lib/Fey/Column.pm
-SHA1 b83ecae104515187a2cd396fa7436ef3378264de lib/Fey/Column/Alias.pm
-SHA1 d93090733c2616c396cfea55c415b21789bdab99 lib/Fey/Exceptions.pm
-SHA1 18a2161c3168fa4af1ca94eaf5386a126506b3ad lib/Fey/FK.pm
-SHA1 75e5f0b44aadb690be6cadb60a843d43d3c65d1d lib/Fey/FakeDBI.pm
-SHA1 d7c1844dbc94bf844dbada8dcab6f7c4748291e6 lib/Fey/Literal.pm
-SHA1 b43c7d8b0776c9d10ad9f7d0094bdf5e65477160 lib/Fey/Literal/Function.pm
-SHA1 732b3e6906ed27847692fad9875eda2bcab6d55e lib/Fey/Literal/Null.pm
-SHA1 1d866a346deb61eebcaf178c0791d1a808614a5f lib/Fey/Literal/Number.pm
-SHA1 ca37987c906f70b1cdb1ad73303289237c563add lib/Fey/Literal/String.pm
-SHA1 9967d104b535c74a10c50946202393c8b0190a9f lib/Fey/Literal/Term.pm
-SHA1 7d07efcb948c5910cc49f7db9fab855dc4951def lib/Fey/NamedObjectSet.pm
-SHA1 642d0478faa8534519768f1581362b8756c4acf2 lib/Fey/Placeholder.pm
-SHA1 b4de781f04c673660defa1ccf1d05e3a8696df40 lib/Fey/Role/ColumnLike.pm
-SHA1 b5ebf86424e28cdef579771d4cd9f684a7d3cb2a lib/Fey/Role/Comparable.pm
-SHA1 1f07de45d9962ffe748b36743185e1ddad4fc454 lib/Fey/Role/Groupable.pm
-SHA1 e1e4e9196aae2dd9c7dc66d100b34073c4f5b5ca lib/Fey/Role/HasAliasName.pm
-SHA1 79acab54359cd543adaf43da68a04bfe64a3ef1a lib/Fey/Role/IsLiteral.pm
-SHA1 02fddb9fb4ab0a306ec546cc13209397e9c21c64 lib/Fey/Role/Joinable.pm
-SHA1 f1eedee5349a3b9fecf1b49ff63ebb6380f698a5 lib/Fey/Role/MakesAliasObjects.pm
-SHA1 9a6fac0665517b16156a9804964354021d0d6aad lib/Fey/Role/Named.pm
-SHA1 2782b32d2ceffd4e4008e00933cd4c77ed9e5354 lib/Fey/Role/Orderable.pm
-SHA1 47f925024025e221a9bb8a59d3076772df886cb0 lib/Fey/Role/SQL/Cloneable.pm
-SHA1 83e78c36306374d54ff2583bde1662a9f03e4c04 lib/Fey/Role/SQL/HasBindParams.pm
-SHA1 baa4b6b0b66b88d6dd85ffa8eb657c4c363a1596 lib/Fey/Role/SQL/HasLimitClause.pm
-SHA1 6da5ca46c7cff0ab23c45e4efccb98bd7de58e70 lib/Fey/Role/SQL/HasOrderByClause.pm
-SHA1 69e2fa68c26a25cc48686e49f4de6e7d19e3c26b lib/Fey/Role/SQL/HasWhereClause.pm
-SHA1 6afc2e8622b0be7dd4ede6a8749829187cf868da lib/Fey/Role/SQL/ReturnsData.pm
-SHA1 30996793d1b25a8366d36b5f5e135d47358cfadc lib/Fey/Role/Selectable.pm
-SHA1 72df0d91b8454e4ee89e77d17b2fcd903a6feff0 lib/Fey/Role/SetOperation.pm
-SHA1 3cec7cc9cc3007cf1ac509b5757168dadf645b39 lib/Fey/Role/TableLike.pm
-SHA1 6e1bc21cda5d5d1741c45b3717933f775cd17184 lib/Fey/SQL.pm
-SHA1 c5d6d666c04ea2c1cfc256c10405504438d881fe lib/Fey/SQL/Delete.pm
-SHA1 658f62f4f2d7e3186e9b5813058a24b0bce51ea0 lib/Fey/SQL/Except.pm
-SHA1 520b840fab48256728d853866ccc176330460ed4 lib/Fey/SQL/Fragment/Join.pm
-SHA1 7e259e8e7e986fd563af011f5283ad5a7c1686a7 lib/Fey/SQL/Fragment/Where/Boolean.pm
-SHA1 d121faf636917d28cd3ff87549df12de0c587411 lib/Fey/SQL/Fragment/Where/Comparison.pm
-SHA1 2747bfccc533358b2294c9582b9c8385bf1d398c lib/Fey/SQL/Fragment/Where/SubgroupEnd.pm
-SHA1 fd968d7ca12e36051ac46f1251631dc12cbbea29 lib/Fey/SQL/Fragment/Where/SubgroupStart.pm
-SHA1 b7031ed13b49108dac8a2bd3d9146e13b62f32f1 lib/Fey/SQL/Insert.pm
-SHA1 a8578c1a246a681c19337f41c16fd8e0a12ed316 lib/Fey/SQL/Intersect.pm
-SHA1 f0c5acf3548d5ee78a72f645d986e1b6e4514752 lib/Fey/SQL/Select.pm
-SHA1 0d2b95e9601d57c885b49bd9443cc4886470bcb2 lib/Fey/SQL/Union.pm
-SHA1 dfb79519fca42dc217cd83d1cf7674dab9232bd9 lib/Fey/SQL/Update.pm
-SHA1 e6a234fa2cf74d4f7ac96800a61fdafc6def0653 lib/Fey/SQL/Where.pm
-SHA1 b0af164d0fc56c8bc2768930054ce468c46f1100 lib/Fey/Schema.pm
-SHA1 c469374dd5b80929b65dabe6c2c2e94e26a01ea6 lib/Fey/Table.pm
-SHA1 710bff1ad854d337e1028b4b0893567d19a17aaf lib/Fey/Table/Alias.pm
-SHA1 cab5b5b872ff47633558790f5121c633e632ece1 lib/Fey/Types.pm
-SHA1 22771fd227aa7b4868d18cb223e29f3a0e55357b lib/Fey/Types/Internal.pm
+SHA1 52958fb384a751bab53f857d57dcdc4e4c8533e1 META.json
+SHA1 640bb293b19afc5aacaebe5419f5fe0e4137572f META.yml
+SHA1 97b4c52eed4b37a31c3749ab2ccc27b9f61956d0 Makefile.PL
+SHA1 da0bca60c5649220ef6704126e77cc618ccecc19 README
+SHA1 6aaf0627b4b942d29a158a25c9c3386b67a844ba dist.ini
+SHA1 88278f6d1fcbf1c3f576b348472cd8d8ca83fe49 lib/Fey.pm
+SHA1 de433b4e31bbc17ef1b19e7f84a275a5a556c720 lib/Fey/Column.pm
+SHA1 106563430a3b7fe54e1cf27424e8c01f7c296858 lib/Fey/Column/Alias.pm
+SHA1 94c82fa43cafaa2124563cd140c29ac731e4bdf7 lib/Fey/Exceptions.pm
+SHA1 6976be17c6c95c4ab7b4226634b25b0f6211b2c1 lib/Fey/FK.pm
+SHA1 bf7481bfc75f01b3837e49e5e142ed86930b3f5a lib/Fey/FakeDBI.pm
+SHA1 4cdd72cdaa9721ae2be0db49a48f4a60ab8fe990 lib/Fey/Literal.pm
+SHA1 a89b9825a60a71dc1e816e3757342d70b15071d8 lib/Fey/Literal/Function.pm
+SHA1 6691abc76d08000d91532d78eee47ddd40d4b9bc lib/Fey/Literal/Null.pm
+SHA1 cf910e9f0faffe1cfdb68c4bf0bb77ef69ad9ffe lib/Fey/Literal/Number.pm
+SHA1 ca741f729b5847d78753b6e295aa76898e060222 lib/Fey/Literal/String.pm
+SHA1 9f0771c0cbdeb3cefca6e65e1628a6570ef8467e lib/Fey/Literal/Term.pm
+SHA1 cb1b804802a18ed502b06537fcb8e8b8cc233ae5 lib/Fey/NamedObjectSet.pm
+SHA1 42fc194b6918dbbc9c6d0890679114710e111fbc lib/Fey/Placeholder.pm
+SHA1 ff1c86d114d30022d5010916416802bf82df37ac lib/Fey/Role/ColumnLike.pm
+SHA1 1a66082d0498f3da1e6769120686915fe8ba0efe lib/Fey/Role/Comparable.pm
+SHA1 54d9421bedf4604900eaaf4237d2b2b0dc401b26 lib/Fey/Role/Groupable.pm
+SHA1 30369e702457eaba0ecbe00247b3dc37d1abaf68 lib/Fey/Role/HasAliasName.pm
+SHA1 52281f65c2ed990d70a6188cc09ffcea8698775e lib/Fey/Role/IsLiteral.pm
+SHA1 cd59675bd46f9566ee0b52edcdafb4467d865f5d lib/Fey/Role/Joinable.pm
+SHA1 f939e99ab89c88a7497d75d80dbddee5860acabe lib/Fey/Role/MakesAliasObjects.pm
+SHA1 ede417ece95f0f9a1098f5e191a3a484d9351717 lib/Fey/Role/Named.pm
+SHA1 6afdf47c1b715e1d5575f9c3bd30c431cb5dc233 lib/Fey/Role/Orderable.pm
+SHA1 678a39e35fef9e9ccf35dbc60c9eca39fedebf09 lib/Fey/Role/SQL/Cloneable.pm
+SHA1 892db171f23b8b69381160bd71e7ac1a790c21cd lib/Fey/Role/SQL/HasBindParams.pm
+SHA1 97a34075d6a25debe1b8f631cd3946ae9ac6929d lib/Fey/Role/SQL/HasLimitClause.pm
+SHA1 ce2017a03ce1cdc7c7125215634165a63e1a01f4 lib/Fey/Role/SQL/HasOrderByClause.pm
+SHA1 b80532fabeb629e7010e131edef13bda13440fde lib/Fey/Role/SQL/HasWhereClause.pm
+SHA1 02b3599ec390273b83ef83827e599a3ed448c500 lib/Fey/Role/SQL/ReturnsData.pm
+SHA1 37a8812d15ab4b66cec6996e67fee0c7e44d71db lib/Fey/Role/Selectable.pm
+SHA1 b8b39ca2876909cc373acf41ced984f63386909f lib/Fey/Role/SetOperation.pm
+SHA1 5dfcc2936ea3e7aa7d785c7f14639b00d4ef8404 lib/Fey/Role/TableLike.pm
+SHA1 a865b42f12935077b5084efbe276148a27e9064a lib/Fey/SQL.pm
+SHA1 7aca02701ce2774d527a7ab3408c088184e093ce lib/Fey/SQL/Delete.pm
+SHA1 10c6753cfcb863d16dcc0031f1162b1c866ab915 lib/Fey/SQL/Except.pm
+SHA1 4d240ca97eaf6e4cbbf2366b4ad052e736be128a lib/Fey/SQL/Fragment/Join.pm
+SHA1 2b6956a6b63969696becee3769b7fb71c194cce5 lib/Fey/SQL/Fragment/Where/Boolean.pm
+SHA1 92acbde1272a89aec9af2ed4fdc5ca259a60c7cc lib/Fey/SQL/Fragment/Where/Comparison.pm
+SHA1 1d7321eff56c0fe1c11607b715840d52b7e007d3 lib/Fey/SQL/Fragment/Where/SubgroupEnd.pm
+SHA1 9655001b56ff316b638945f5926343f6ba7254ad lib/Fey/SQL/Fragment/Where/SubgroupStart.pm
+SHA1 82c69b6eee2760792077dd20c2657099432d46ff lib/Fey/SQL/Insert.pm
+SHA1 9754c33ed54ca8c46a50a450e1f9a4186a0284a1 lib/Fey/SQL/Intersect.pm
+SHA1 54fdbe10f24b1f8c39f20a8312e1b78200f9b6d2 lib/Fey/SQL/Select.pm
+SHA1 218f8f44323668793a402c7df8bb5b6f921a52b0 lib/Fey/SQL/Union.pm
+SHA1 55ce7e026568ca4b62dbdaf6a3d166dd0ff24754 lib/Fey/SQL/Update.pm
+SHA1 9c66c9a1ad9f8b8dc4ccde19862df88c050e893f lib/Fey/SQL/Where.pm
+SHA1 6e78c5f2459073224d5f704f69547a921e0ad843 lib/Fey/Schema.pm
+SHA1 3b8a0225df82cc5eae10353e9aaf25c2f811b5d8 lib/Fey/Table.pm
+SHA1 3ec21c4141167f67330c1f71cd7006c1c9a6d791 lib/Fey/Table/Alias.pm
+SHA1 0497b525f6626fee2d2889466adab39ab4593811 lib/Fey/Types.pm
+SHA1 b9fea570180e9f76ffb6de6742963640d244fa03 lib/Fey/Types/Internal.pm
 SHA1 c0ab7f77aef992e61de52fea20c33954d73549b3 perltidyrc
 SHA1 ac3ef84b953cbee8e9e47c6d4cbf128a03da87cb t/Column-guess-type.t
 SHA1 cf06b1ae6449d165e7f2db617988c228b2d182bf t/Column.t
@@ -91,7 +91,7 @@ SHA1 8f7acb55383d542a03978fa2579633d2eb98cde3 t/SQL.t
 SHA1 923ca4b88c495317a82c6f5973808cfb27f6c495 t/SQL/Delete-bind-params.t
 SHA1 7bd066c2ee4cd4878af77b3e59ba29eb3cb88ca6 t/SQL/Delete.t
 SHA1 e24b43f0cd27ab5ca1a92b3c001b0dfd2abe7ef5 t/SQL/Insert-bind-params.t
-SHA1 9534bb4649f4257abadab5978865b34a769d2809 t/SQL/Insert.t
+SHA1 0425805b01558168d86e80ef916a21998100a54f t/SQL/Insert.t
 SHA1 b87f165765fe336d75b8f25d3a4f38cf05f7469e t/SQL/Select-bind-params.t
 SHA1 be730cb37513d5101559f858219a1434fdb188fd t/SQL/Select-clone.t
 SHA1 0f910870e0f4e4ba6b87b638984ad45e886770f0 t/SQL/Select-from-clause.t
@@ -115,7 +115,7 @@ SHA1 24e5d5a345f6c3031c0af503eb1a4ecff979ef1b t/release-pod.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkyetsYACgkQIgMCsV8qvRLvzACggMCYZD5K6rz4y3L2mO7kBI1V
-RZwAnR22molLpREyMrwxsgIMyr7n2hxz
-=JdDV
+iEYEARECAAYFAk0H83QACgkQIgMCsV8qvRIo+QCfV3zbz/fDA32SSvPxrNR1xRRC
+vGwAoI2fMASuHqaB04Q775Ga3q6c1xSh
+=WE+t
 -----END PGP SIGNATURE-----

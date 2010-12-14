@@ -1,6 +1,6 @@
 package Fey::Role::Named;
 BEGIN {
-  $Fey::Role::Named::VERSION = '0.37';
+  $Fey::Role::Named::VERSION = '0.38';
 }
 
 use strict;
@@ -25,7 +25,7 @@ Fey::Role::Named - A role for things with a name
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,6 @@
 package Fey::Table;
 BEGIN {
-  $Fey::Table::VERSION = '0.37';
+  $Fey::Table::VERSION = '0.38';
 }
 
 use strict;
@@ -324,7 +324,7 @@ Fey::Table - Represents a table (or view)
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 
@@ -406,10 +406,12 @@ if one exists.
 
 =head2 $table->columns(@names)
 
-When this method is called with no arguments, it returns all of the
-columns in the table. If given a list of names, it returns only the
-specified columns. If a name is given which doesn't match a column in
-the table, then it is ignored.
+When this method is called with no arguments, it returns all of the columns in
+the table. Columns are returned in the order with which they were added to the
+table.
+
+If given a list of names, it returns only the specified columns. If a name is
+given which doesn't match a column in the table, then it is ignored.
 
 =head2 $table->candidate_keys()
 

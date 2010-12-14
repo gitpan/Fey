@@ -1,6 +1,6 @@
 package Fey::Placeholder;
 BEGIN {
-  $Fey::Placeholder::VERSION = '0.37';
+  $Fey::Placeholder::VERSION = '0.38';
 }
 
 use strict;
@@ -37,7 +37,7 @@ Fey::Placeholder - Represents a placeholder
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

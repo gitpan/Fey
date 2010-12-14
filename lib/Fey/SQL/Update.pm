@@ -1,6 +1,6 @@
 package Fey::SQL::Update;
 BEGIN {
-  $Fey::SQL::Update::VERSION = '0.37';
+  $Fey::SQL::Update::VERSION = '0.38';
 }
 
 use strict;
@@ -190,7 +190,7 @@ Fey::SQL::Update - Represents a UPDATE query
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

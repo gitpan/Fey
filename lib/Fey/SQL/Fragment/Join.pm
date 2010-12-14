@@ -1,6 +1,6 @@
 package Fey::SQL::Fragment::Join;
 BEGIN {
-  $Fey::SQL::Fragment::Join::VERSION = '0.37';
+  $Fey::SQL::Fragment::Join::VERSION = '0.38';
 }
 
 use strict;
@@ -205,7 +205,7 @@ Fey::SQL::Fragment::Join - Represents a single join in a FROM clause
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 DESCRIPTION
 

@@ -1,6 +1,6 @@
 package Fey::Role::Orderable;
 BEGIN {
-  $Fey::Role::Orderable::VERSION = '0.37';
+  $Fey::Role::Orderable::VERSION = '0.38';
 }
 
 use strict;
@@ -25,7 +25,7 @@ Fey::Role::Orderable - A role for things that can be part of a ORDER BY clause
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

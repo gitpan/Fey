@@ -1,6 +1,6 @@
 package Fey::Role::IsLiteral;
 BEGIN {
-  $Fey::Role::IsLiteral::VERSION = '0.37';
+  $Fey::Role::IsLiteral::VERSION = '0.38';
 }
 
 use strict;
@@ -29,7 +29,7 @@ Fey::Role::IsLiteral - A role for things that are literals
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

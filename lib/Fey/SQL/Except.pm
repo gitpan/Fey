@@ -1,6 +1,6 @@
 package Fey::SQL::Except;
 BEGIN {
-  $Fey::SQL::Except::VERSION = '0.37';
+  $Fey::SQL::Except::VERSION = '0.38';
 }
 
 use strict;
@@ -27,7 +27,7 @@ Fey::SQL::Except - Represents an EXCEPT operation
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

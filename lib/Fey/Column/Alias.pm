@@ -1,6 +1,6 @@
 package Fey::Column::Alias;
 BEGIN {
-  $Fey::Column::Alias::VERSION = '0.37';
+  $Fey::Column::Alias::VERSION = '0.38';
 }
 
 use strict;
@@ -103,7 +103,7 @@ Fey::Column::Alias - Represents an alias for a column
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

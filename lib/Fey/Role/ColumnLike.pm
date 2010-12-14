@@ -1,6 +1,6 @@
 package Fey::Role::ColumnLike;
 BEGIN {
-  $Fey::Role::ColumnLike::VERSION = '0.37';
+  $Fey::Role::ColumnLike::VERSION = '0.38';
 }
 
 use strict;
@@ -49,7 +49,7 @@ Fey::Role::ColumnLike - A role for "column-like" behavior
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

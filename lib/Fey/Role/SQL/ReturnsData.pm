@@ -1,6 +1,6 @@
 package Fey::Role::SQL::ReturnsData;
 BEGIN {
-  $Fey::Role::SQL::ReturnsData::VERSION = '0.37';
+  $Fey::Role::SQL::ReturnsData::VERSION = '0.38';
 }
 
 use strict;
@@ -26,7 +26,7 @@ Fey::Role::SQL::ReturnsData - A role for SQL queries which return data (SELECT, 
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

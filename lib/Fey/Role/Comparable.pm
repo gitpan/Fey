@@ -1,6 +1,6 @@
 package Fey::Role::Comparable;
 BEGIN {
-  $Fey::Role::Comparable::VERSION = '0.37';
+  $Fey::Role::Comparable::VERSION = '0.38';
 }
 
 use strict;
@@ -25,7 +25,7 @@ Fey::Role::Comparable - A role for things that can be part of a WHERE clause
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

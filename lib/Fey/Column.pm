@@ -1,6 +1,6 @@
 package Fey::Column;
 BEGIN {
-  $Fey::Column::VERSION = '0.37';
+  $Fey::Column::VERSION = '0.38';
 }
 
 use strict;
@@ -185,7 +185,7 @@ Fey::Column - Represents a column
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

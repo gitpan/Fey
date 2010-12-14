@@ -1,6 +1,6 @@
 package Fey::Role::SQL::Cloneable;
 BEGIN {
-  $Fey::Role::SQL::Cloneable::VERSION = '0.37';
+  $Fey::Role::SQL::Cloneable::VERSION = '0.38';
 }
 
 use strict;
@@ -69,7 +69,7 @@ Fey::Role::SQL::Cloneable - Adds a just-deep-enough clone() method to SQL object
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

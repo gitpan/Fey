@@ -1,6 +1,6 @@
 package Fey::Literal::Number;
 BEGIN {
-  $Fey::Literal::Number::VERSION = '0.37';
+  $Fey::Literal::Number::VERSION = '0.38';
 }
 
 use strict;
@@ -49,7 +49,7 @@ Fey::Literal::Number - Represents a literal number in a SQL statement
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 

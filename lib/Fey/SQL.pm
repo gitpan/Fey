@@ -1,6 +1,6 @@
 package Fey::SQL;
 BEGIN {
-  $Fey::SQL::VERSION = '0.37';
+  $Fey::SQL::VERSION = '0.38';
 }
 
 use strict;
@@ -70,7 +70,7 @@ Fey::SQL - Documentation on SQL generation with Fey and SQL object factory
 
 =head1 VERSION
 
-version 0.37
+version 0.38
 
 =head1 SYNOPSIS
 
@@ -161,7 +161,7 @@ object, it could be a function or anything that produces valid SQL.
   # WHERE LENGTH(Part.name) = 10
   $sql->where( $length, '=', 10 );
 
-The second parameter in a conditional can any comparison operator that
+The second parameter in a conditional can be any comparison operator that
 produces valid SQL:
 
   # WHERE Message.body LIKE 'hello%'

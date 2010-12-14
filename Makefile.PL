@@ -37,9 +37,10 @@ my %WriteMakefileArgs = (
     'MooseX::Types' => '0',
     'Scalar::Util' => '0',
     'Task::Weaken' => '0.99',
+    'Tie::IxHash' => '0',
     'namespace::autoclean' => '0'
   },
-  'VERSION' => '0.37',
+  'VERSION' => '0.38',
   'test' => {
     'TESTS' => 't/*.t t/Column/*.t t/SQL/*.t t/Table/*.t'
   }
