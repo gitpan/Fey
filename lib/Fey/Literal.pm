@@ -1,6 +1,6 @@
 package Fey::Literal;
 BEGIN {
-  $Fey::Literal::VERSION = '0.38';
+  $Fey::Literal::VERSION = '0.39';
 }
 
 use strict;
@@ -66,7 +66,7 @@ Fey::Literal - Factory for making a literal piece of a SQL statement
 
 =head1 VERSION
 
-version 0.38
+version 0.39
 
 =head1 SYNOPSIS
 
@@ -98,11 +98,11 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2010 by Dave Rolsky.
+This software is Copyright (c) 2011 by Dave Rolsky.
 
 This is free software, licensed under:
 
-  The Artistic License 2.0
+  The Artistic License 2.0 (GPL Compatible)
 
 =cut
 

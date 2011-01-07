@@ -1,6 +1,6 @@
 package Fey::SQL::Insert;
 BEGIN {
-  $Fey::SQL::Insert::VERSION = '0.38';
+  $Fey::SQL::Insert::VERSION = '0.39';
 }
 
 use strict;
@@ -158,7 +158,15 @@ sub values_clause {
 
         $v .= (
             join ', ',
-            map { $vals->{ $_->name() }->sql($dbh) } @cols
+            map {
+                my $val = $vals->{ $_->name() };
+                my $sql = $val->sql($dbh);
+                blessed $val
+                    && $val->can('does')
+                    && $val->does('Fey::Role::SQL::ReturnsData')
+                    ? "($sql)"
+                    : $sql
+                } @cols
         );
 
         $v .= ')';
@@ -185,7 +193,7 @@ Fey::SQL::Insert - Represents a INSERT query
 
 =head1 VERSION
 
-version 0.38
+version 0.39
 
 =head1 SYNOPSIS
 
@@ -300,11 +308,11 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2010 by Dave Rolsky.
+This software is Copyright (c) 2011 by Dave Rolsky.
 
 This is free software, licensed under:
 
-  The Artistic License 2.0
+  The Artistic License 2.0 (GPL Compatible)
 
 =cut
 

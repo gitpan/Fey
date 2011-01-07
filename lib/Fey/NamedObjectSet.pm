@@ -1,6 +1,6 @@
 package Fey::NamedObjectSet;
 BEGIN {
-  $Fey::NamedObjectSet::VERSION = '0.38';
+  $Fey::NamedObjectSet::VERSION = '0.39';
 }
 
 use strict;
@@ -79,18 +79,6 @@ __PACKAGE__->meta()->make_immutable();
 
 1;
 
-
-__END__
-=pod
-
-=head1 NAME
-
-Fey::NamedObjectSet
-
-=head1 VERSION
-
-version 0.38
-
 =head1 SYNOPSIS
 
   my $set = Fey::NamedObjectSet->new( $name_col, $size_col );
@@ -143,17 +131,4 @@ the two sets are the same.
 
 See L<Fey> for details on how to report bugs.
 
-=head1 AUTHOR
-
-Dave Rolsky <autarch@urth.org>
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is Copyright (c) 2010 by Dave Rolsky.
-
-This is free software, licensed under:
-
-  The Artistic License 2.0
-
 =cut
-

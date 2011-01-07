@@ -1,6 +1,6 @@
 package Fey::Types::Internal;
 BEGIN {
-  $Fey::Types::Internal::VERSION = '0.38';
+  $Fey::Types::Internal::VERSION = '0.39';
 }
 
 use strict;
@@ -140,17 +140,23 @@ subtype IntoElement, as Object, where {
     };
 
 subtype NullableInsertValue, as Item, where {
-           !blessed $_
-        || ( $_->can('does') && $_->does('Fey::Role::IsLiteral') )
+    !blessed $_
+        || (
+            $_->can('does')
+            && (   $_->does('Fey::Role::IsLiteral')
+                || $_->does('Fey::Role::SQL::ReturnsData') )
+        )
         || $_->isa('Fey::Placeholder')
         || overload::Overloaded($_);
 };
 
 subtype NonNullableInsertValue, as Defined, where {
     !blessed $_
-        || ( $_->can('does')
-        && $_->does('Fey::Role::IsLiteral')
-        && !$_->isa('Fey::Literal::Null') )
+        || (
+            $_->can('does')
+            && (   $_->does('Fey::Role::IsLiteral')
+                 || $_->does('Fey::Role::SQL::ReturnsData') )
+            && !$_->isa('Fey::Literal::Null') )
         || $_->isa('Fey::Placeholder')
         || overload::Overloaded($_);
 };
@@ -158,7 +164,11 @@ subtype NonNullableInsertValue, as Defined, where {
 subtype NullableUpdateValue, as Item, where {
            !blessed $_
         || $_->isa('Fey::Column')
-        || ( $_->can('does') && $_->does('Fey::Role::IsLiteral') )
+        || (
+            $_->can('does')
+            && (   $_->does('Fey::Role::IsLiteral')
+                || $_->does('Fey::Role::SQL::ReturnsData') )
+        )
         || $_->isa('Fey::Placeholder')
         || overload::Overloaded($_);
 };
@@ -166,9 +176,11 @@ subtype NullableUpdateValue, as Item, where {
 subtype NonNullableUpdateValue, as Defined, where {
     !blessed $_
         || $_->isa('Fey::Column')
-        || ( $_->can('does')
-        && $_->does('Fey::Role::IsLiteral')
-        && !$_->isa('Fey::Literal::Null') )
+        || (
+            $_->can('does')
+            && (   $_->does('Fey::Role::IsLiteral')
+                 || $_->does('Fey::Role::SQL::ReturnsData') )
+            && !$_->isa('Fey::Literal::Null') )
         || $_->isa('Fey::Placeholder')
         || overload::Overloaded($_);
 };
@@ -230,7 +242,7 @@ Fey::Types::Internal - Types for use in Fey
 
 =head1 VERSION
 
-version 0.38
+version 0.39
 
 =head1 DESCRIPTION
 
@@ -248,11 +260,11 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2010 by Dave Rolsky.
+This software is Copyright (c) 2011 by Dave Rolsky.
 
 This is free software, licensed under:
 
-  The Artistic License 2.0
+  The Artistic License 2.0 (GPL Compatible)
 
 =cut
 

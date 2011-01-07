@@ -40,7 +40,7 @@ my %WriteMakefileArgs = (
     'Tie::IxHash' => '0',
     'namespace::autoclean' => '0'
   },
-  'VERSION' => '0.38',
+  'VERSION' => '0.39',
   'test' => {
     'TESTS' => 't/*.t t/Column/*.t t/SQL/*.t t/Table/*.t'
   }

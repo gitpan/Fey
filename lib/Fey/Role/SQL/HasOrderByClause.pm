@@ -1,6 +1,6 @@
 package Fey::Role::SQL::HasOrderByClause;
 BEGIN {
-  $Fey::Role::SQL::HasOrderByClause::VERSION = '0.38';
+  $Fey::Role::SQL::HasOrderByClause::VERSION = '0.39';
 }
 
 use strict;
@@ -78,7 +78,7 @@ Fey::Role::SQL::HasOrderByClause - A role for queries which can include a ORDER 
 
 =head1 VERSION
 
-version 0.38
+version 0.39
 
 =head1 SYNOPSIS
 
@@ -115,11 +115,11 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2010 by Dave Rolsky.
+This software is Copyright (c) 2011 by Dave Rolsky.
 
 This is free software, licensed under:
 
-  The Artistic License 2.0
+  The Artistic License 2.0 (GPL Compatible)
 
 =cut
 

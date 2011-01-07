@@ -4,7 +4,7 @@
       "Dave Rolsky <autarch@urth.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.102345, CPAN::Meta::Converter version 2.101670",
+   "generated_by" : "Dist::Zilla version 4.200000, CPAN::Meta::Converter version 2.102400",
    "license" : [
       "artistic_2"
    ],
@@ -61,6 +61,6 @@
          "web" : "http://hg.urth.org/hg/Fey"
       }
    },
-   "version" : "0.38"
+   "version" : "0.39"
 }
 
