@@ -1,6 +1,6 @@
 package Fey::Role::MakesAliasObjects;
 BEGIN {
-  $Fey::Role::MakesAliasObjects::VERSION = '0.39';
+  $Fey::Role::MakesAliasObjects::VERSION = '0.40';
 }
 
 use strict;
@@ -58,7 +58,7 @@ Fey::Role::MakesAliasObjects - A role for objects with separate alias objects
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,6 @@
 package Fey::Table;
 BEGIN {
-  $Fey::Table::VERSION = '0.39';
+  $Fey::Table::VERSION = '0.40';
 }
 
 use strict;
@@ -324,7 +324,7 @@ Fey::Table - Represents a table (or view)
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

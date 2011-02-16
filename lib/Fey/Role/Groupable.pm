@@ -1,6 +1,6 @@
 package Fey::Role::Groupable;
 BEGIN {
-  $Fey::Role::Groupable::VERSION = '0.39';
+  $Fey::Role::Groupable::VERSION = '0.40';
 }
 
 use strict;
@@ -25,7 +25,7 @@ Fey::Role::Groupable - A role for things that can be part of a GROUP BY clause
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

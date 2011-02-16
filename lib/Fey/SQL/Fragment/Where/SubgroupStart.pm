@@ -1,6 +1,6 @@
 package Fey::SQL::Fragment::Where::SubgroupStart;
 BEGIN {
-  $Fey::SQL::Fragment::Where::SubgroupStart::VERSION = '0.39';
+  $Fey::SQL::Fragment::Where::SubgroupStart::VERSION = '0.40';
 }
 
 use strict;
@@ -31,7 +31,7 @@ Fey::SQL::Fragment::Where::SubgroupStart - Represents the start of a subgroup in
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 DESCRIPTION
 

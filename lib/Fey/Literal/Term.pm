@@ -1,6 +1,6 @@
 package Fey::Literal::Term;
 BEGIN {
-  $Fey::Literal::Term::VERSION = '0.39';
+  $Fey::Literal::Term::VERSION = '0.40';
 }
 
 use strict;
@@ -96,7 +96,7 @@ Fey::Literal::Term - Represents a literal term in a SQL statement
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

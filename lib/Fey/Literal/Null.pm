@@ -1,6 +1,6 @@
 package Fey::Literal::Null;
 BEGIN {
-  $Fey::Literal::Null::VERSION = '0.39';
+  $Fey::Literal::Null::VERSION = '0.40';
 }
 
 use strict;
@@ -37,7 +37,7 @@ Fey::Literal::Null - Represents a literal NULL in a SQL statement
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

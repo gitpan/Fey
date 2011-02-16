@@ -1,6 +1,6 @@
 package Fey::SQL::Delete;
 BEGIN {
-  $Fey::SQL::Delete::VERSION = '0.39';
+  $Fey::SQL::Delete::VERSION = '0.40';
 }
 
 use strict;
@@ -87,7 +87,7 @@ Fey::SQL::Delete - Represents a DELETE query
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

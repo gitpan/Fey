@@ -1,6 +1,6 @@
 package Fey::Role::SQL::HasWhereClause;
 BEGIN {
-  $Fey::Role::SQL::HasWhereClause::VERSION = '0.39';
+  $Fey::Role::SQL::HasWhereClause::VERSION = '0.40';
 }
 
 use strict;
@@ -184,7 +184,7 @@ Fey::Role::SQL::HasWhereClause - A role for queries which can include a WHERE cl
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

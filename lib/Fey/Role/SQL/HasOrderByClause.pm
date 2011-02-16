@@ -1,6 +1,6 @@
 package Fey::Role::SQL::HasOrderByClause;
 BEGIN {
-  $Fey::Role::SQL::HasOrderByClause::VERSION = '0.39';
+  $Fey::Role::SQL::HasOrderByClause::VERSION = '0.40';
 }
 
 use strict;
@@ -78,7 +78,7 @@ Fey::Role::SQL::HasOrderByClause - A role for queries which can include a ORDER 
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

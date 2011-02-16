@@ -1,6 +1,6 @@
 package Fey::SQL::Insert;
 BEGIN {
-  $Fey::SQL::Insert::VERSION = '0.39';
+  $Fey::SQL::Insert::VERSION = '0.40';
 }
 
 use strict;
@@ -193,7 +193,7 @@ Fey::SQL::Insert - Represents a INSERT query
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

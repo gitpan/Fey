@@ -1,6 +1,6 @@
 package Fey::Exceptions;
 BEGIN {
-  $Fey::Exceptions::VERSION = '0.39';
+  $Fey::Exceptions::VERSION = '0.40';
 }
 
 use strict;
@@ -60,7 +60,7 @@ Fey::Exceptions - Defines exceptions used in the core Fey classes
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

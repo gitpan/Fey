@@ -1,6 +1,6 @@
 package Fey::SQL::Where;
 BEGIN {
-  $Fey::SQL::Where::VERSION = '0.39';
+  $Fey::SQL::Where::VERSION = '0.40';
 }
 
 use strict;
@@ -35,7 +35,7 @@ Fey::SQL::Where - Represents a "stand-alone" WHERE clause
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

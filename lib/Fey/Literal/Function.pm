@@ -1,6 +1,6 @@
 package Fey::Literal::Function;
 BEGIN {
-  $Fey::Literal::Function::VERSION = '0.39';
+  $Fey::Literal::Function::VERSION = '0.40';
 }
 
 use strict;
@@ -73,7 +73,7 @@ Fey::Literal::Function - Represents a literal function in a SQL statement
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

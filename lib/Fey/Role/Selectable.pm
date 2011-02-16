@@ -1,6 +1,6 @@
 package Fey::Role::Selectable;
 BEGIN {
-  $Fey::Role::Selectable::VERSION = '0.39';
+  $Fey::Role::Selectable::VERSION = '0.40';
 }
 
 use strict;
@@ -25,7 +25,7 @@ Fey::Role::Selectable - A role for things that can go in a SELECT clause
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

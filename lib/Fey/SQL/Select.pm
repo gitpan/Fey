@@ -1,6 +1,6 @@
 package Fey::SQL::Select;
 BEGIN {
-  $Fey::SQL::Select::VERSION = '0.39';
+  $Fey::SQL::Select::VERSION = '0.40';
 }
 
 use strict;
@@ -266,7 +266,7 @@ sub _fk_for_join {
             unless @fk;
 
         param_error
-            'You specified a join for two tables with more than one foreign key,'
+            "You specified a join for two tables with more than one foreign key ($names)"
             . ', so you must specify which foreign key to use for the join.';
     }
 
@@ -474,6 +474,12 @@ sub bind_params {
 
     return (
         (
+            map { $_->bind_params() }
+            grep { $_->can('bind_params') }
+            $self->select_clause_elements()
+        ),
+
+        (
             map  { $_->bind_params() }
             grep { $_->can('bind_params') }
             map  { $self->_get_from($_) }
@@ -505,7 +511,7 @@ Fey::SQL::Select - Represents a SELECT query
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

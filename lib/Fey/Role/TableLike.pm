@@ -1,6 +1,6 @@
 package Fey::Role::TableLike;
 BEGIN {
-  $Fey::Role::TableLike::VERSION = '0.39';
+  $Fey::Role::TableLike::VERSION = '0.40';
 }
 
 use strict;
@@ -25,7 +25,7 @@ Fey::Role::TableLike - A role for things that are like a table
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

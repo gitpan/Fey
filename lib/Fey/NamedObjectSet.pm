@@ -1,6 +1,6 @@
 package Fey::NamedObjectSet;
 BEGIN {
-  $Fey::NamedObjectSet::VERSION = '0.39';
+  $Fey::NamedObjectSet::VERSION = '0.40';
 }
 
 use strict;

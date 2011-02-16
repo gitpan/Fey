@@ -1,6 +1,6 @@
 package Fey::SQL::Union;
 BEGIN {
-  $Fey::SQL::Union::VERSION = '0.39';
+  $Fey::SQL::Union::VERSION = '0.40';
 }
 
 use strict;
@@ -27,7 +27,7 @@ Fey::SQL::Union - Represents a UNION operation
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

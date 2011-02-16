@@ -1,6 +1,6 @@
 package Fey::Role::HasAliasName;
 BEGIN {
-  $Fey::Role::HasAliasName::VERSION = '0.39';
+  $Fey::Role::HasAliasName::VERSION = '0.40';
 }
 
 use strict;
@@ -88,7 +88,7 @@ Fey::Role::HasAliasName - A role for objects that bring an alias with them
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 

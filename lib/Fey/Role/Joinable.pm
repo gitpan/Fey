@@ -1,6 +1,6 @@
 package Fey::Role::Joinable;
 BEGIN {
-  $Fey::Role::Joinable::VERSION = '0.39';
+  $Fey::Role::Joinable::VERSION = '0.40';
 }
 
 use strict;
@@ -25,7 +25,7 @@ Fey::Role::Joinable - A role for things that can be part of a JOIN BY clause
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 
